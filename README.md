@@ -23,7 +23,8 @@ python3 build_multisector_site.py
 
 输出到：
 
-- `dist/index.html`：静态站页面
+- `dist/index.html`：本地静态站页面
+- `docs/index.html`：GitHub Pages 发布页面
 - `data/apparel_snapshot.json`：本期标准化数据快照
 
 ## 数据口径

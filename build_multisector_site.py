@@ -28,6 +28,7 @@ WORKSPACE = BASE.parent
 XLSX = Path("/Users/chenxiaomei/Desktop/服饰大盘.xlsx")
 BAG_HISTORY = WORKSPACE / "history" / "2026-07-20.json"
 OUT = BASE / "dist"
+PAGES_OUT = BASE / "docs"  # GitHub Pages 支持 /docs 作为发布源
 DATA_OUT = BASE / "data"
 
 INDUSTRIES = {
@@ -249,9 +250,12 @@ def main() -> None:
         raise FileNotFoundError(f"未找到箱包鞋靴归档：{BAG_HISTORY}")
     data = build_data()
     OUT.mkdir(parents=True, exist_ok=True)
+    PAGES_OUT.mkdir(parents=True, exist_ok=True)
     DATA_OUT.mkdir(parents=True, exist_ok=True)
     (DATA_OUT / "apparel_snapshot.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    (OUT / "index.html").write_text(HTML.replace("__DATA__", json.dumps(data, ensure_ascii=False)), encoding="utf-8")
+    page = HTML.replace("__DATA__", json.dumps(data, ensure_ascii=False))
+    (OUT / "index.html").write_text(page, encoding="utf-8")
+    (PAGES_OUT / "index.html").write_text(page, encoding="utf-8")
     print("[✓] 已生成服饰四大赛道创意分析站")
     for key in data["order"]:
         x = data["industries"][key]
