@@ -1,0 +1,44 @@
+{
+  "underwear": {
+    "7a17033423": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "f2fc0aea2b": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "cc830a3642": {"struct": "多人剧情", "role": "多人对话", "scene": "商场门店"},
+    "274c1081cf": {"struct": "沉浸式产品展示", "role": "无人出镜", "scene": "居家室内"},
+    "440686fbfc": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "87245366da": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "4ac9734499": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "e0e31d38b0": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "0e92106434": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "4905436f70": {"struct": "沉浸式产品展示", "role": "无人出镜", "scene": "居家室内"},
+    "95b5e61a14": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "a31ee2ef0c": {"struct": "多人剧情", "role": "多人对话", "scene": "工厂车间"}
+  },
+  "menswear": {
+    "c3da4c4f0d": {"struct": "真人口播", "role": "单人男", "scene": "户外街景"},
+    "120704b80a": {"struct": "多人剧情", "role": "多人对话", "scene": "机场"},
+    "fa7d012ee5": {"struct": "多人剧情", "role": "多人对话", "scene": "户外街景"},
+    "d4e242b2d3": {"struct": "真人口播", "role": "单人男", "scene": "居家室内"},
+    "e1a62519f4": {"struct": "沉浸式产品展示", "role": "无人出镜", "scene": "居家室内"},
+    "544bfb4dd6": {"struct": "真人口播", "role": "单人男", "scene": "户外街景"},
+    "67c5c7fb65": {"struct": "真人口播", "role": "单人男", "scene": "商场门店"},
+    "8d171fa177": {"struct": "多人剧情", "role": "多人对话", "scene": "商场门店"},
+    "4db9e32639": {"struct": "真人口播", "role": "单人男", "scene": "居家室内"},
+    "2b88b230f6": {"struct": "多人剧情", "role": "多人对话", "scene": "商场门店"},
+    "290c9f84a1": {"struct": "真人口播", "role": "单人男", "scene": "户外街景"},
+    "ff7f44332b": {"struct": "真人口播", "role": "单人男", "scene": "户外街景"}
+  },
+  "womenswear": {
+    "f75e3624d3": {"struct": "真人口播", "role": "单人女", "scene": "商场门店"},
+    "1048fd0349": {"struct": "真人口播", "role": "单人女", "scene": "商场门店"},
+    "c6b6455d7d": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "2dff0bb230": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "55f744f630": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "1b48accfbd": {"struct": "真人口播", "role": "单人女", "scene": "居家室内"},
+    "791e804621": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "67425207d1": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "0afb7520b7": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "8c8a33d7ea": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "b7e82dec6c": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"},
+    "d2ee002238": {"struct": "真人口播", "role": "单人女", "scene": "户外街景"}
+  }
+}

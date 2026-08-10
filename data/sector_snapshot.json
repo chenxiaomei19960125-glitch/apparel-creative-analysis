@@ -1,0 +1,1802 @@
+{
+  "underwear": {
+    "id": "underwear",
+    "name": "内衣",
+    "emoji": "🩲",
+    "desc": "舒适、支撑与贴身功能表达",
+    "metrics": {
+      "materials": 475,
+      "ctr": 2.03,
+      "cvr": 9.08,
+      "v3": 35.2
+    },
+    "analysis": {
+      "struct": [
+        {
+          "name": "真人口播",
+          "count": 459,
+          "share": 91.7,
+          "ctr": 2.01,
+          "cvr": 8.9,
+          "v3": 34.1
+        },
+        {
+          "name": "沉浸式产品展示",
+          "count": 14,
+          "share": 5.0,
+          "ctr": 1.62,
+          "cvr": 12.55,
+          "v3": 45.3
+        },
+        {
+          "name": "多人剧情",
+          "count": 2,
+          "share": 3.3,
+          "ctr": 3.14,
+          "cvr": 8.83,
+          "v3": 52.6
+        },
+        {
+          "name": "直播切片",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        },
+        {
+          "name": "AI数字人口播",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        }
+      ],
+      "role": [
+        {
+          "name": "单人女",
+          "count": 459,
+          "share": 91.7,
+          "ctr": 2.01,
+          "cvr": 8.9,
+          "v3": 34.1
+        },
+        {
+          "name": "无人出镜",
+          "count": 14,
+          "share": 5.0,
+          "ctr": 1.62,
+          "cvr": 12.55,
+          "v3": 45.3
+        },
+        {
+          "name": "多人对话",
+          "count": 2,
+          "share": 3.3,
+          "ctr": 3.14,
+          "cvr": 8.83,
+          "v3": 52.6
+        }
+      ],
+      "scene": [
+        {
+          "name": "居家室内",
+          "count": 473,
+          "share": 96.7,
+          "ctr": 1.99,
+          "cvr": 9.09,
+          "v3": 34.6
+        },
+        {
+          "name": "商场门店",
+          "count": 1,
+          "share": 2.4,
+          "ctr": 3.86,
+          "cvr": 10.46,
+          "v3": 60.9
+        },
+        {
+          "name": "工厂车间",
+          "count": 1,
+          "share": 0.9,
+          "ctr": 1.24,
+          "cvr": 4.55,
+          "v3": 30.9
+        }
+      ],
+      "sell": [
+        {
+          "name": "功能实测",
+          "count": 426,
+          "share": 91.4,
+          "ctr": 2.06,
+          "cvr": 9.02,
+          "v3": 35.9
+        },
+        {
+          "name": "信任背书",
+          "count": 35,
+          "share": 7.2,
+          "ctr": 1.47,
+          "cvr": 10.02,
+          "v3": 28.5
+        },
+        {
+          "name": "场景痛点",
+          "count": 9,
+          "share": 0.9,
+          "ctr": 2.63,
+          "cvr": 8.67,
+          "v3": 32.0
+        },
+        {
+          "name": "颜值种草",
+          "count": 5,
+          "share": 0.5,
+          "ctr": 2.9,
+          "cvr": 7.58,
+          "v3": 24.8
+        }
+      ],
+      "function": [
+        {
+          "name": "舒适贴合",
+          "count": 352,
+          "share": 75.4,
+          "ctr": 1.95,
+          "cvr": 8.65,
+          "v3": 33.9
+        },
+        {
+          "name": "核心卖点展示",
+          "count": 62,
+          "share": 13.9,
+          "ctr": 2.69,
+          "cvr": 10.1,
+          "v3": 44.9
+        },
+        {
+          "name": "亲肤安全",
+          "count": 35,
+          "share": 7.2,
+          "ctr": 1.47,
+          "cvr": 10.02,
+          "v3": 28.5
+        },
+        {
+          "name": "吸汗透气",
+          "count": 12,
+          "share": 2.0,
+          "ctr": 1.7,
+          "cvr": 15.03,
+          "v3": 48.0
+        },
+        {
+          "name": "收腹提臀",
+          "count": 9,
+          "share": 0.9,
+          "ctr": 2.63,
+          "cvr": 8.67,
+          "v3": 32.0
+        },
+        {
+          "name": "亲肤舒适",
+          "count": 5,
+          "share": 0.5,
+          "ctr": 2.9,
+          "cvr": 7.58,
+          "v3": 24.8
+        }
+      ],
+      "emotion": [
+        {
+          "name": "身材焦虑自信种草",
+          "count": 361,
+          "share": 76.3,
+          "ctr": 1.96,
+          "cvr": 8.65,
+          "v3": 33.8
+        },
+        {
+          "name": "结果导向",
+          "count": 62,
+          "share": 13.9,
+          "ctr": 2.69,
+          "cvr": 10.1,
+          "v3": 44.9
+        },
+        {
+          "name": "家长关怀",
+          "count": 35,
+          "share": 7.2,
+          "ctr": 1.47,
+          "cvr": 10.02,
+          "v3": 28.5
+        },
+        {
+          "name": "促销紧迫感",
+          "count": 12,
+          "share": 2.0,
+          "ctr": 1.7,
+          "cvr": 15.03,
+          "v3": 48.0
+        },
+        {
+          "name": "舒适治愈",
+          "count": 5,
+          "share": 0.5,
+          "ctr": 2.9,
+          "cvr": 7.58,
+          "v3": 24.8
+        }
+      ]
+    },
+    "categories": [
+      {
+        "name": "文胸/乳贴/内裤",
+        "count": 352,
+        "share": 75.4,
+        "ctr": 1.95,
+        "cvr": 8.65,
+        "v3": 33.9
+      },
+      {
+        "name": "儿童内衣裤袜",
+        "count": 35,
+        "share": 7.2,
+        "ctr": 1.47,
+        "cvr": 10.02,
+        "v3": 28.5
+      },
+      {
+        "name": "健身/运动服装",
+        "count": 21,
+        "share": 3.5,
+        "ctr": 1.74,
+        "cvr": 8.35,
+        "v3": 33.4
+      },
+      {
+        "name": "通用骑行装备",
+        "count": 8,
+        "share": 3.4,
+        "ctr": 3.58,
+        "cvr": 10.12,
+        "v3": 56.1
+      },
+      {
+        "name": "袜子",
+        "count": 12,
+        "share": 2.0,
+        "ctr": 1.7,
+        "cvr": 15.03,
+        "v3": 48.0
+      },
+      {
+        "name": "塑身衣/裤",
+        "count": 9,
+        "share": 0.9,
+        "ctr": 2.63,
+        "cvr": 8.67,
+        "v3": 32.0
+      },
+      {
+        "name": "婴童尿裤/尿垫",
+        "count": 3,
+        "share": 0.7,
+        "ctr": 1.64,
+        "cvr": 12.11,
+        "v3": 28.6
+      },
+      {
+        "name": "其他内衣裤袜",
+        "count": 4,
+        "share": 0.7,
+        "ctr": 3.16,
+        "cvr": 15.89,
+        "v3": 54.2
+      },
+      {
+        "name": "睡衣/家居服",
+        "count": 5,
+        "share": 0.5,
+        "ctr": 2.9,
+        "cvr": 7.58,
+        "v3": 24.8
+      }
+    ],
+    "top": [
+      {
+        "id": "7a17033423",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b536eab2aaaniaiozci25vbv4iedxyqahka.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 15609.604462857142,
+        "ctr": 1.771815206120518,
+        "cvr": 10.694597574421168,
+        "v3": 40.25558880147797,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "f2fc0aea2b",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc36uacqaaacqan2o3tenvbx5iefd2qakca.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 14481.214285714286,
+        "ctr": 2.269928220627125,
+        "cvr": 11.417159024714987,
+        "v3": 23.53909735772745,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "cc830a3642",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53y4afeaaasyaiqn3o7zvbxryekldqausa.f0.mp4",
+        "cat2": "骑行运动",
+        "category": "通用骑行装备",
+        "spend": 13139.979187142857,
+        "ctr": 3.86385176435037,
+        "cvr": 10.457400165896432,
+        "v3": 60.91427007400559,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "商场门店",
+          "sell": "功能实测",
+          "function": "核心卖点展示",
+          "emotion": "结果导向",
+          "people": "目标消费人群",
+          "pain": "常见决策顾虑"
+        }
+      },
+      {
+        "id": "274c1081cf",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53gqaseaabuiani2ti6jvbwnaeei2acisa.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 10257.06857142857,
+        "ctr": 1.1963033659025193,
+        "cvr": 12.051455653351388,
+        "v3": 46.98557748724549,
+        "tags": {
+          "struct": "沉浸式产品展示",
+          "role": "无人出镜",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "440686fbfc",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53o4atgaab3uakz3suubvbu5yegn3qcm2a.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 9407.114384285715,
+        "ctr": 2.256409261882577,
+        "cvr": 7.028167363362894,
+        "v3": 47.93089961322415,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "87245366da",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53eybnsaacj4anrcdjdrvbsjqe3etafwka.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 9328.67044,
+        "ctr": 2.020891787796283,
+        "cvr": 8.852867830423941,
+        "v3": 54.35644226717854,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "4ac9734499",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3waaeuaaa7yapuxlujbvbvmaejkyaassa.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 7332.145072857143,
+        "ctr": 1.7027560661194785,
+        "cvr": 11.320076665069477,
+        "v3": 33.01056594820293,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "e0e31d38b0",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3fyab4aaabeab43tubbvbwlqedyxaahsa.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 6624.868571428572,
+        "ctr": 2.078291222415813,
+        "cvr": 9.084406294706724,
+        "v3": 22.347725637342613,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "0e92106434",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b536ablwaackqaklvrgynvbr4aexpyafo2a.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 6117.8762799999995,
+        "ctr": 1.2000345540843407,
+        "cvr": 11.617676464707058,
+        "v3": 18.18780500990284,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "4905436f70",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3tmafaaaa2yaauqv2onubvgyekcnqauca.f0.mp4",
+        "cat2": "童装/亲子装",
+        "category": "儿童内衣裤袜",
+        "spend": 5818.796045714285,
+        "ctr": 2.240403942724127,
+        "cvr": 8.663480807769385,
+        "v3": 37.18487486067924,
+        "tags": {
+          "struct": "沉浸式产品展示",
+          "role": "无人出镜",
+          "scene": "居家室内",
+          "sell": "信任背书",
+          "function": "亲肤安全",
+          "emotion": "家长关怀",
+          "people": "儿童家长",
+          "pain": "敏感肌/勒痕/不耐穿"
+        }
+      },
+      {
+        "id": "95b5e61a14",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3v4a2eaab2aadfesfi5vbvlyeukxqdisa.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 5782.401428571428,
+        "ctr": 1.7555273469370456,
+        "cvr": 9.150169000482858,
+        "v3": 18.539634705055892,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      },
+      {
+        "id": "a31ee2ef0c",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53gactkaafe4aa7jkg75vb6maeguyaknka.f0.mp4",
+        "cat2": "内衣裤袜/睡衣/家居服",
+        "category": "文胸/乳贴/内裤",
+        "spend": 5014.024628571429,
+        "ctr": 1.2365560983868722,
+        "cvr": 4.548846565653288,
+        "v3": 30.88188063947962,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "工厂车间",
+          "sell": "功能实测",
+          "function": "舒适贴合",
+          "emotion": "身材焦虑自信种草",
+          "people": "女性贴身需求",
+          "pain": "勒痕/空杯/闷热"
+        }
+      }
+    ],
+    "narrative": "内衣赛道消耗主要集中在「文胸/乳贴/内裤」；创意结构以「真人口播」为主。CTR 最优为「多人剧情」（3.14%），3秒完播最优为「多人剧情」（52.6%）。",
+    "note": "标签先以品类创意基线生成；Top素材的可见画面标签会由 manual_visual_tags.json 的关键帧人工核验覆盖。"
+  },
+  "menswear": {
+    "id": "menswear",
+    "name": "男装",
+    "emoji": "👔",
+    "desc": "功能、版型与通勤场景表达",
+    "metrics": {
+      "materials": 460,
+      "ctr": 2.42,
+      "cvr": 4.88,
+      "v3": 36.5
+    },
+    "analysis": {
+      "struct": [
+        {
+          "name": "真人口播",
+          "count": 455,
+          "share": 92.8,
+          "ctr": 2.51,
+          "cvr": 5.03,
+          "v3": 36.8
+        },
+        {
+          "name": "多人剧情",
+          "count": 4,
+          "share": 5.6,
+          "ctr": 1.15,
+          "cvr": 2.29,
+          "v3": 33.7
+        },
+        {
+          "name": "沉浸式产品展示",
+          "count": 1,
+          "share": 1.5,
+          "ctr": 1.44,
+          "cvr": 5.15,
+          "v3": 31.9
+        },
+        {
+          "name": "直播切片",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        },
+        {
+          "name": "AI数字人口播",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        }
+      ],
+      "role": [
+        {
+          "name": "单人女",
+          "count": 425,
+          "share": 80.2,
+          "ctr": 2.5,
+          "cvr": 4.99,
+          "v3": 35.5
+        },
+        {
+          "name": "单人男",
+          "count": 30,
+          "share": 12.6,
+          "ctr": 2.59,
+          "cvr": 5.29,
+          "v3": 45.2
+        },
+        {
+          "name": "多人对话",
+          "count": 4,
+          "share": 5.6,
+          "ctr": 1.15,
+          "cvr": 2.29,
+          "v3": 33.7
+        },
+        {
+          "name": "无人出镜",
+          "count": 1,
+          "share": 1.5,
+          "ctr": 1.44,
+          "cvr": 5.15,
+          "v3": 31.9
+        }
+      ],
+      "scene": [
+        {
+          "name": "居家室内",
+          "count": 418,
+          "share": 83.0,
+          "ctr": 2.49,
+          "cvr": 4.97,
+          "v3": 35.6
+        },
+        {
+          "name": "户外街景",
+          "count": 38,
+          "share": 11.7,
+          "ctr": 2.54,
+          "cvr": 5.35,
+          "v3": 41.3
+        },
+        {
+          "name": "商场门店",
+          "count": 3,
+          "share": 3.6,
+          "ctr": 1.16,
+          "cvr": 2.02,
+          "v3": 38.4
+        },
+        {
+          "name": "机场",
+          "count": 1,
+          "share": 1.7,
+          "ctr": 0.9,
+          "cvr": 3.41,
+          "v3": 46.2
+        }
+      ],
+      "sell": [
+        {
+          "name": "颜值种草",
+          "count": 305,
+          "share": 67.6,
+          "ctr": 2.25,
+          "cvr": 4.83,
+          "v3": 36.0
+        },
+        {
+          "name": "功能实测",
+          "count": 146,
+          "share": 31.1,
+          "ctr": 2.8,
+          "cvr": 5.01,
+          "v3": 37.8
+        },
+        {
+          "name": "场景痛点",
+          "count": 9,
+          "share": 1.3,
+          "ctr": 1.92,
+          "cvr": 4.26,
+          "v3": 32.5
+        }
+      ],
+      "function": [
+        {
+          "name": "显瘦修饰",
+          "count": 297,
+          "share": 66.3,
+          "ctr": 2.27,
+          "cvr": 4.87,
+          "v3": 35.6
+        },
+        {
+          "name": "显腿长",
+          "count": 81,
+          "share": 14.0,
+          "ctr": 2.98,
+          "cvr": 5.29,
+          "v3": 32.7
+        },
+        {
+          "name": "速干透气",
+          "count": 26,
+          "share": 7.9,
+          "ctr": 2.12,
+          "cvr": 6.53,
+          "v3": 41.6
+        },
+        {
+          "name": "核心卖点展示",
+          "count": 32,
+          "share": 7.8,
+          "ctr": 3.12,
+          "cvr": 3.17,
+          "v3": 41.3
+        },
+        {
+          "name": "保暖轻量",
+          "count": 7,
+          "share": 1.4,
+          "ctr": 3.04,
+          "cvr": 3.88,
+          "v3": 48.0
+        },
+        {
+          "name": "省心搭配",
+          "count": 9,
+          "share": 1.3,
+          "ctr": 1.92,
+          "cvr": 4.26,
+          "v3": 32.5
+        },
+        {
+          "name": "挺括显瘦",
+          "count": 5,
+          "share": 1.1,
+          "ctr": 1.37,
+          "cvr": 0.79,
+          "v3": 62.9
+        },
+        {
+          "name": "显瘦显高",
+          "count": 3,
+          "share": 0.2,
+          "ctr": 2.51,
+          "cvr": 13.73,
+          "v3": 25.6
+        }
+      ],
+      "emotion": [
+        {
+          "name": "身材焦虑自信种草",
+          "count": 378,
+          "share": 80.3,
+          "ctr": 2.39,
+          "cvr": 4.94,
+          "v3": 35.1
+        },
+        {
+          "name": "运动挑战",
+          "count": 26,
+          "share": 7.9,
+          "ctr": 2.12,
+          "cvr": 6.53,
+          "v3": 41.6
+        },
+        {
+          "name": "结果导向",
+          "count": 32,
+          "share": 7.8,
+          "ctr": 3.12,
+          "cvr": 3.17,
+          "v3": 41.3
+        },
+        {
+          "name": "冬季保暖",
+          "count": 7,
+          "share": 1.4,
+          "ctr": 3.04,
+          "cvr": 3.88,
+          "v3": 48.0
+        },
+        {
+          "name": "省心决策",
+          "count": 9,
+          "share": 1.3,
+          "ctr": 1.92,
+          "cvr": 4.26,
+          "v3": 32.5
+        },
+        {
+          "name": "通勤自信",
+          "count": 5,
+          "share": 1.1,
+          "ctr": 1.37,
+          "cvr": 0.79,
+          "v3": 62.9
+        },
+        {
+          "name": "美女吸睛",
+          "count": 3,
+          "share": 0.2,
+          "ctr": 2.51,
+          "cvr": 13.73,
+          "v3": 25.6
+        }
+      ]
+    },
+    "categories": [
+      {
+        "name": "上衣",
+        "count": 297,
+        "share": 66.3,
+        "ctr": 2.27,
+        "cvr": 4.87,
+        "v3": 35.6
+      },
+      {
+        "name": "裤子",
+        "count": 81,
+        "share": 14.0,
+        "ctr": 2.98,
+        "cvr": 5.29,
+        "v3": 32.7
+      },
+      {
+        "name": "速干衣裤",
+        "count": 26,
+        "share": 7.9,
+        "ctr": 2.12,
+        "cvr": 6.53,
+        "v3": 41.6
+      },
+      {
+        "name": "羽绒服/棉服",
+        "count": 7,
+        "share": 1.4,
+        "ctr": 3.04,
+        "cvr": 3.88,
+        "v3": 48.0
+      },
+      {
+        "name": "套装/学生校服/工作制服",
+        "count": 9,
+        "share": 1.3,
+        "ctr": 1.92,
+        "cvr": 4.26,
+        "v3": 32.5
+      },
+      {
+        "name": "衬衫",
+        "count": 5,
+        "share": 1.1,
+        "ctr": 1.37,
+        "cvr": 0.79,
+        "v3": 62.9
+      },
+      {
+        "name": "汉服/民族/舞台/中式服装",
+        "count": 6,
+        "share": 1.0,
+        "ctr": 1.47,
+        "cvr": 2.23,
+        "v3": 37.0
+      },
+      {
+        "name": "冲锋衣裤",
+        "count": 1,
+        "share": 0.3,
+        "ctr": 2.9,
+        "cvr": 4.99,
+        "v3": 38.9
+      },
+      {
+        "name": "战术靴/飞行靴/沙漠靴",
+        "count": 2,
+        "share": 0.3,
+        "ctr": 4.19,
+        "cvr": 1.52,
+        "v3": 17.2
+      },
+      {
+        "name": "健身/运动服装",
+        "count": 2,
+        "share": 0.2,
+        "ctr": 2.69,
+        "cvr": 6.68,
+        "v3": 18.9
+      }
+    ],
+    "top": [
+      {
+        "id": "c3da4c4f0d",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53i4afuaaa4uapzkklsnvburyeljdqawsa.f0.mp4",
+        "cat2": "户外服装/运动服装",
+        "category": "速干衣裤",
+        "spend": 3414.943728571429,
+        "ctr": 3.0574328435707505,
+        "cvr": 5.678651983547831,
+        "v3": 62.41582245125022,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "户外街景",
+          "sell": "功能实测",
+          "function": "速干透气",
+          "emotion": "运动挑战",
+          "people": "运动户外",
+          "pain": "闷汗/黏身/不耐磨"
+        }
+      },
+      {
+        "id": "120704b80a",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53luaqyaab3malud3urrvbwxiebroqcdca.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2946.8053557142857,
+        "ctr": 0.9019366539283632,
+        "cvr": 3.4111310592459607,
+        "v3": 46.18630169663357,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "机场",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "fa7d012ee5",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53aeaqmaabiiafmk3unbvbwaieayaqcbsa.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2744.811737142857,
+        "ctr": 1.0186155894936673,
+        "cvr": 1.2517385257301807,
+        "v3": 35.42908263277683,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "d4e242b2d3",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53r4byaaad5magblri65vbtdyeqchqhaca.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2720.6168985714285,
+        "ctr": 4.624499481723519,
+        "cvr": 6.405734440778246,
+        "v3": 41.06213200667949,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "居家室内",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "e1a62519f4",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53duaa6aaaiyacnjif2jvbuhieb4oqad2a.f0.mp4",
+        "cat2": "户外服装/运动服装",
+        "category": "速干衣裤",
+        "spend": 2674.614517142857,
+        "ctr": 1.4444506183427592,
+        "cvr": 5.151363104198026,
+        "v3": 31.860148928357585,
+        "tags": {
+          "struct": "沉浸式产品展示",
+          "role": "无人出镜",
+          "scene": "居家室内",
+          "sell": "功能实测",
+          "function": "速干透气",
+          "emotion": "运动挑战",
+          "people": "运动户外",
+          "pain": "闷汗/黏身/不耐磨"
+        }
+      },
+      {
+        "id": "544bfb4dd6",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3muaiyaaaviapadcl2bvbuzierrsqbdca.f0.mp4",
+        "cat2": "户外服装/运动服装",
+        "category": "速干衣裤",
+        "spend": 2512.750162857143,
+        "ctr": 1.5692726133660668,
+        "cvr": 9.737098344693282,
+        "v3": 37.93823077281409,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "户外街景",
+          "sell": "功能实测",
+          "function": "速干透气",
+          "emotion": "运动挑战",
+          "people": "运动户外",
+          "pain": "闷汗/黏身/不耐磨"
+        }
+      },
+      {
+        "id": "67c5c7fb65",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3lmaikaaatqaehmsnibvbuwyeqvnqbbka.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2223.2149414285714,
+        "ctr": 0.6923554409587929,
+        "cvr": 1.7241379310344827,
+        "v3": 65.4257416556491,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "商场门店",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "8d171fa177",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3omajcaaa2yacfcimxbubu4yesfzqbeka.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2126.5244,
+        "ctr": 2.235481774679506,
+        "cvr": 3.8054968287526427,
+        "v3": 22.818875818413975,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "商场门店",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "4db9e32639",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3eiawuaabiuap33fouvurwiqenirac2sa.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 2067.1314285714284,
+        "ctr": 0.8706842814341156,
+        "cvr": 1.6166281755196306,
+        "v3": 54.05556411837238,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "居家室内",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "2b88b230f6",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc36iaqkaab5ealvycqlbvbx4qeaxzacbka.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 1906.6530014285713,
+        "ctr": 0.5114117054344623,
+        "cvr": 0.37174721189591076,
+        "v3": 24.10190654362769,
+        "tags": {
+          "struct": "多人剧情",
+          "role": "多人对话",
+          "scene": "商场门店",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "290c9f84a1",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3uqc52aafxuagqw6y2vur7jae3wsalxka.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 1858.0011685714287,
+        "ctr": 1.708194065638548,
+        "cvr": 5.400635368866926,
+        "v3": 26.626563071691454,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "ff7f44332b",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53qmbpqaacgqagvqzerzvbraye7cbqf6ca.f0.mp4",
+        "cat2": "男装",
+        "category": "上衣",
+        "spend": 1836.2258942857145,
+        "ctr": 6.479384540401091,
+        "cvr": 2.561442189222489,
+        "v3": 43.88149401037332,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人男",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      }
+    ],
+    "narrative": "男装赛道消耗主要集中在「上衣」；创意结构以「真人口播」为主。CTR 最优为「真人口播」（2.51%），3秒完播最优为「真人口播」（36.8%）。",
+    "note": "标签先以品类创意基线生成；Top素材的可见画面标签会由 manual_visual_tags.json 的关键帧人工核验覆盖。"
+  },
+  "womenswear": {
+    "id": "womenswear",
+    "name": "女装",
+    "emoji": "👗",
+    "desc": "上身效果、风格与穿搭种草",
+    "metrics": {
+      "materials": 442,
+      "ctr": 2.61,
+      "cvr": 10.49,
+      "v3": 44.7
+    },
+    "analysis": {
+      "struct": [
+        {
+          "name": "真人口播",
+          "count": 441,
+          "share": 99.8,
+          "ctr": 2.61,
+          "cvr": 10.49,
+          "v3": 44.7
+        },
+        {
+          "name": "沉浸式产品展示",
+          "count": 1,
+          "share": 0.2,
+          "ctr": 2.36,
+          "cvr": 11.16,
+          "v3": 70.0
+        },
+        {
+          "name": "多人剧情",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        },
+        {
+          "name": "直播切片",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        },
+        {
+          "name": "AI数字人口播",
+          "count": 0,
+          "share": null,
+          "ctr": null,
+          "cvr": null,
+          "v3": null
+        }
+      ],
+      "role": [
+        {
+          "name": "单人女",
+          "count": 439,
+          "share": 99.4,
+          "ctr": 2.61,
+          "cvr": 10.49,
+          "v3": 44.7
+        },
+        {
+          "name": "单人男",
+          "count": 2,
+          "share": 0.3,
+          "ctr": 1.43,
+          "cvr": 9.6,
+          "v3": 37.9
+        },
+        {
+          "name": "无人出镜",
+          "count": 1,
+          "share": 0.2,
+          "ctr": 2.36,
+          "cvr": 11.16,
+          "v3": 70.0
+        }
+      ],
+      "scene": [
+        {
+          "name": "居家室内",
+          "count": 400,
+          "share": 60.8,
+          "ctr": 2.83,
+          "cvr": 9.32,
+          "v3": 45.4
+        },
+        {
+          "name": "户外街景",
+          "count": 40,
+          "share": 21.1,
+          "ctr": 2.37,
+          "cvr": 9.77,
+          "v3": 39.8
+        },
+        {
+          "name": "商场门店",
+          "count": 2,
+          "share": 18.1,
+          "ctr": 2.16,
+          "cvr": 15.27,
+          "v3": 48.0
+        }
+      ],
+      "sell": [
+        {
+          "name": "颜值种草",
+          "count": 225,
+          "share": 50.4,
+          "ctr": 2.46,
+          "cvr": 10.23,
+          "v3": 47.4
+        },
+        {
+          "name": "功能实测",
+          "count": 189,
+          "share": 46.7,
+          "ctr": 2.78,
+          "cvr": 10.64,
+          "v3": 43.0
+        },
+        {
+          "name": "场景痛点",
+          "count": 21,
+          "share": 1.6,
+          "ctr": 3.17,
+          "cvr": 11.25,
+          "v3": 33.6
+        },
+        {
+          "name": "信任背书",
+          "count": 7,
+          "share": 1.2,
+          "ctr": 1.23,
+          "cvr": 14.28,
+          "v3": 15.9
+        }
+      ],
+      "function": [
+        {
+          "name": "显瘦修饰",
+          "count": 203,
+          "share": 48.6,
+          "ctr": 2.45,
+          "cvr": 10.34,
+          "v3": 47.9
+        },
+        {
+          "name": "核心卖点展示",
+          "count": 83,
+          "share": 34.0,
+          "ctr": 2.47,
+          "cvr": 11.81,
+          "v3": 44.2
+        },
+        {
+          "name": "显腿长",
+          "count": 91,
+          "share": 10.9,
+          "ctr": 3.85,
+          "cvr": 7.6,
+          "v3": 39.3
+        },
+        {
+          "name": "显瘦显高",
+          "count": 21,
+          "share": 1.8,
+          "ctr": 2.87,
+          "cvr": 7.73,
+          "v3": 33.5
+        },
+        {
+          "name": "省心搭配",
+          "count": 21,
+          "share": 1.6,
+          "ctr": 3.17,
+          "cvr": 11.25,
+          "v3": 33.6
+        },
+        {
+          "name": "亲肤安全",
+          "count": 7,
+          "share": 1.2,
+          "ctr": 1.23,
+          "cvr": 14.28,
+          "v3": 15.9
+        },
+        {
+          "name": "防晒透气",
+          "count": 8,
+          "share": 0.7,
+          "ctr": 2.85,
+          "cvr": 4.47,
+          "v3": 35.7
+        },
+        {
+          "name": "舒适贴合",
+          "count": 3,
+          "share": 0.5,
+          "ctr": 1.89,
+          "cvr": 7.43,
+          "v3": 38.9
+        },
+        {
+          "name": "速干透气",
+          "count": 2,
+          "share": 0.3,
+          "ctr": 1.43,
+          "cvr": 9.6,
+          "v3": 37.9
+        },
+        {
+          "name": "吸汗透气",
+          "count": 1,
+          "share": 0.2,
+          "ctr": 2.36,
+          "cvr": 11.16,
+          "v3": 70.0
+        },
+        {
+          "name": "亲肤舒适",
+          "count": 1,
+          "share": 0.1,
+          "ctr": 1.75,
+          "cvr": 0.0,
+          "v3": 20.6
+        },
+        {
+          "name": "保暖轻量",
+          "count": 1,
+          "share": 0.0,
+          "ctr": 1.18,
+          "cvr": 1.53,
+          "v3": 47.8
+        }
+      ],
+      "emotion": [
+        {
+          "name": "身材焦虑自信种草",
+          "count": 297,
+          "share": 60.0,
+          "ctr": 2.7,
+          "cvr": 9.82,
+          "v3": 46.3
+        },
+        {
+          "name": "结果导向",
+          "count": 83,
+          "share": 34.0,
+          "ctr": 2.47,
+          "cvr": 11.81,
+          "v3": 44.2
+        },
+        {
+          "name": "美女吸睛",
+          "count": 21,
+          "share": 1.8,
+          "ctr": 2.87,
+          "cvr": 7.73,
+          "v3": 33.5
+        },
+        {
+          "name": "省心决策",
+          "count": 21,
+          "share": 1.6,
+          "ctr": 3.17,
+          "cvr": 11.25,
+          "v3": 33.6
+        },
+        {
+          "name": "家长关怀",
+          "count": 7,
+          "share": 1.2,
+          "ctr": 1.23,
+          "cvr": 14.28,
+          "v3": 15.9
+        },
+        {
+          "name": "夏日出行",
+          "count": 8,
+          "share": 0.7,
+          "ctr": 2.85,
+          "cvr": 4.47,
+          "v3": 35.7
+        },
+        {
+          "name": "运动挑战",
+          "count": 2,
+          "share": 0.3,
+          "ctr": 1.43,
+          "cvr": 9.6,
+          "v3": 37.9
+        },
+        {
+          "name": "促销紧迫感",
+          "count": 1,
+          "share": 0.2,
+          "ctr": 2.36,
+          "cvr": 11.16,
+          "v3": 70.0
+        },
+        {
+          "name": "舒适治愈",
+          "count": 1,
+          "share": 0.1,
+          "ctr": 1.75,
+          "cvr": 0.0,
+          "v3": 20.6
+        },
+        {
+          "name": "冬季保暖",
+          "count": 1,
+          "share": 0.0,
+          "ctr": 1.18,
+          "cvr": 1.53,
+          "v3": 47.8
+        }
+      ]
+    },
+    "categories": [
+      {
+        "name": "上衣",
+        "count": 203,
+        "share": 48.6,
+        "ctr": 2.45,
+        "cvr": 10.34,
+        "v3": 47.9
+      },
+      {
+        "name": "裤子",
+        "count": 91,
+        "share": 10.9,
+        "ctr": 3.85,
+        "cvr": 7.6,
+        "v3": 39.3
+      },
+      {
+        "name": "裙子",
+        "count": 21,
+        "share": 1.8,
+        "ctr": 2.87,
+        "cvr": 7.73,
+        "v3": 33.5
+      },
+      {
+        "name": "套装/学生校服/工作制服",
+        "count": 21,
+        "share": 1.6,
+        "ctr": 3.17,
+        "cvr": 11.25,
+        "v3": 33.6
+      },
+      {
+        "name": "儿童内衣裤袜",
+        "count": 7,
+        "share": 1.2,
+        "ctr": 1.23,
+        "cvr": 14.28,
+        "v3": 15.9
+      },
+      {
+        "name": "奶奶装",
+        "count": 11,
+        "share": 1.1,
+        "ctr": 2.0,
+        "cvr": 3.94,
+        "v3": 40.4
+      },
+      {
+        "name": "防晒衣/皮肤衣",
+        "count": 8,
+        "share": 0.7,
+        "ctr": 2.85,
+        "cvr": 4.47,
+        "v3": 35.7
+      },
+      {
+        "name": "文胸/乳贴/内裤",
+        "count": 3,
+        "share": 0.5,
+        "ctr": 1.89,
+        "cvr": 7.43,
+        "v3": 38.9
+      },
+      {
+        "name": "休闲鞋",
+        "count": 4,
+        "share": 0.5,
+        "ctr": 1.9,
+        "cvr": 5.1,
+        "v3": 37.4
+      },
+      {
+        "name": "速干衣裤",
+        "count": 2,
+        "share": 0.3,
+        "ctr": 1.43,
+        "cvr": 9.6,
+        "v3": 37.9
+      }
+    ],
+    "top": [
+      {
+        "id": "f75e3624d3",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53lyaamaaan4anvvlrafvbuxqeazpaabsa.f0.mp4",
+        "cat2": "",
+        "category": "",
+        "spend": 30512.745144285716,
+        "ctr": 2.3459038991729027,
+        "cvr": 16.613172026418123,
+        "v3": 43.94565276846393,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "商场门店",
+          "sell": "功能实测",
+          "function": "核心卖点展示",
+          "emotion": "结果导向",
+          "people": "目标消费人群",
+          "pain": "常见决策顾虑"
+        }
+      },
+      {
+        "id": "1048fd0349",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc35iaguaaafeajyf3gprvbv2qenlvaa2sa.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 8959.486772857143,
+        "ctr": 1.5145707439979081,
+        "cvr": 10.694895291718135,
+        "v3": 62.02460089930527,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "商场门店",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "c6b6455d7d",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3yuahaaaauqaddhlq3zvbvrieodcqa4ca.f0.mp4",
+        "cat2": "",
+        "category": "",
+        "spend": 7699.646802857143,
+        "ctr": 2.4788390203692052,
+        "cvr": 9.192103052366283,
+        "v3": 42.109817600354155,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "功能实测",
+          "function": "核心卖点展示",
+          "emotion": "结果导向",
+          "people": "目标消费人群",
+          "pain": "常见决策顾虑"
+        }
+      },
+      {
+        "id": "2dff0bb230",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3duab4aaavyakctdghnvbuhiedyoqahsa.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 6934.517862857143,
+        "ctr": 1.503163953468213,
+        "cvr": 13.060527772651781,
+        "v3": 67.63420336720215,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "55f744f630",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53vyadeaaauuakrgspkjvbvlqegkxaamsa.f0.mp4",
+        "cat2": "",
+        "category": "",
+        "spend": 6306.165941428572,
+        "ctr": 1.9973944113956184,
+        "cvr": 12.752385976691766,
+        "v3": 44.155319194892634,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "功能实测",
+          "function": "核心卖点展示",
+          "emotion": "结果导向",
+          "people": "目标消费人群",
+          "pain": "常见决策顾虑"
+        }
+      },
+      {
+        "id": "1b48accfbd",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53tmajmaaataaecmtrh5vbvgyes2nqbfsa.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 6036.002754285714,
+        "ctr": 1.5047023904469694,
+        "cvr": 20.90002078569944,
+        "v3": 63.05141623582975,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "居家室内",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "791e804621",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53nqbt6aadn4amhd3m7jvbs3aeh5wagp2a.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 6012.33573,
+        "ctr": 1.5176329116726415,
+        "cvr": 10.083256244218317,
+        "v3": 29.144007284824095,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "67425207d1",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3cqagkaaa6aacr6luxzvbufaemukaazka.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 5396.008494285714,
+        "ctr": 2.8236536727951163,
+        "cvr": 9.301701671010271,
+        "v3": 43.50869537452905,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "0afb7520b7",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53u4ahgaaag4aietlrxvvbvjyeootqa42a.f0.mp4",
+        "cat2": "",
+        "category": "",
+        "spend": 4683.551914285715,
+        "ctr": 2.552909532410857,
+        "cvr": 7.751591089896579,
+        "v3": 55.7856602141235,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "功能实测",
+          "function": "核心卖点展示",
+          "emotion": "结果导向",
+          "people": "目标消费人群",
+          "pain": "常见决策顾虑"
+        }
+      },
+      {
+        "id": "8c8a33d7ea",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53leaesaaa4uangftinrvbuwiejfmqaska.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 3509.3570914285715,
+        "ctr": 1.8398825716131995,
+        "cvr": 8.582726004031633,
+        "v3": 35.192773370782255,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "b7e82dec6c",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0bc3myad2aaaoqac7rbzzzvbuzqehvtaapka.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 3221.0473685714283,
+        "ctr": 3.3182132177828016,
+        "cvr": 11.217062163342554,
+        "v3": 39.25340150459309,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      },
+      {
+        "id": "d2ee002238",
+        "url": "http://adsmind.gdtimg.com/ads_svp_video__0b53caafiaaaoaagofthorvbueaekqiaavca.f0.mp4",
+        "cat2": "女装",
+        "category": "上衣",
+        "spend": 2989.8152571428573,
+        "ctr": 2.4893549725852835,
+        "cvr": 13.873384253819037,
+        "v3": 30.576173207573696,
+        "tags": {
+          "struct": "真人口播",
+          "role": "单人女",
+          "scene": "户外街景",
+          "sell": "颜值种草",
+          "function": "显瘦修饰",
+          "emotion": "身材焦虑自信种草",
+          "people": "通勤女性",
+          "pain": "显胖/不好搭/版型不合身"
+        }
+      }
+    ],
+    "narrative": "女装赛道消耗主要集中在「上衣」；创意结构以「真人口播」为主。CTR 最优为「真人口播」（2.61%），3秒完播最优为「沉浸式产品展示」（70.0%）。",
+    "note": "标签先以品类创意基线生成；Top素材的可见画面标签会由 manual_visual_tags.json 的关键帧人工核验覆盖。"
+  }
+}

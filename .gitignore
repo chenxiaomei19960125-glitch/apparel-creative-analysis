@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .DS_Store
+extract_frames.log
+assets/videos/
+assets/frames/
