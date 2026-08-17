@@ -228,14 +228,119 @@ def tree_html(tree, overall=False):
     return ''.join(parts)
 
 
+def _load_aigc_data():
+    """加载 AIGC 使用情况数据；优先从 data/aigc_daily.json 读取，否则返回空列表。
+    
+    数据格式参考 BI 报表 https://adata.woa.com/bi/view/10140?s=176oqS：
+    每条记录包含：sector(行业), aigc_type(AIGC分类), spend(日均消耗万元), 
+    advertisers(有曝光注主客户数), ctr, td_info_ratio(TD驱动信息量重聚%),
+    cpm, ad_cost(广告条数消耗), td_cost(TD驱动信息量消耗), 
+    ad_advertisers(有曝光广告主数), total_advertisers(有曝光广告主总数), materials(素材数)
+    """
+    p = DATA_DIR / 'aigc_daily.json'
+    if p.exists():
+        return json.loads(p.read_text(encoding='utf-8'))
+    return []
+
+
+def _aigc_html():
+    """生成 AIGC 使用情况 Tab 的完整 HTML。"""
+    data = _load_aigc_data()
+    from datetime import datetime, timedelta
+    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    
+    if not data:
+        return f'''<section class="section"><div class="aigc-hero"><h2>🤖 服饰行业 AIGC 使用情况</h2><p>展示服饰各赛道 AIGC 分类标注的投放效果数据，包括消耗、CTR、完播率、CPM 等核心指标。</p><span class="aigc-date">📅 数据日期：{yesterday}（待更新）</span></div><div class="aigc-insight"><b>提示：</b>暂无 AIGC 数据。请将 BI 报表 <a href="https://adata.woa.com/bi/view/10140?s=176oqS" target="_blank" style="color:#0052d9">数据</a> 导出为 JSON 放入 data/aigc_daily.json 后重新构建。</div></section>'''
+    
+    # 计算汇总 KPI
+    total_spend = sum(x.get('spend', 0) for x in data)
+    total_materials = sum(x.get('materials', 0) for x in data)
+    total_advertisers = sum(x.get('advertisers', 0) for x in data)
+    avg_ctr = sum(x.get('ctr', 0) * x.get('spend', 0) for x in data) / total_spend if total_spend else 0
+    avg_cpm = sum(x.get('cpm', 0) * x.get('spend', 0) for x in data) / total_spend if total_spend else 0
+    
+    # 找出 CTR 最优和消耗最高的 AIGC 类型
+    best_ctr = max(data, key=lambda x: x.get('ctr', 0)) if data else {}
+    top_spend = max(data, key=lambda x: x.get('spend', 0)) if data else {}
+    
+    kpis = f'''
+    <div class="aigc-kpi"><b>{total_spend:.1f}</b><span>总日均消耗(万元)</span></div>
+    <div class="aigc-kpi"><b>{total_materials:,}</b><span>总素材数</span></div>
+    <div class="aigc-kpi"><b>{total_advertisers:,}</b><span>有曝光注主客户数</span></div>
+    <div class="aigc-kpi"><b>{avg_ctr:.2f}%</b><span>加权平均 CTR</span></div>
+    <div class="aigc-kpi"><b>{avg_cpm:.1f}</b><span>加权平均 CPM</span></div>
+    '''
+    
+    # 生成表格行
+    rows = ''
+    for i, item in enumerate(data):
+        sector_tag = f'<span class="sector-tag">{esc(item.get("sector", "服饰"))}</span>'
+        rows += f'''<tr>
+            <td>{i+1}</td>
+            <td>{sector_tag} {esc(item.get("aigc_type", ""))}</td>
+            <td class="num">{item.get("spend", 0):,.2f}</td>
+            <td class="num">{item.get("advertisers", 0):,}</td>
+            <td class="num {"hi" if item == best_ctr else ""}>{item.get("ctr", 0):.2f}%</td>
+            <td class="num">{item.get("td_info_ratio", 0):.2f}%</td>
+            <td class="num">{item.get("cpm", 0):.2f}</td>
+            <td class="num">{item.get("ad_cost", 0):,.2f}</td>
+            <td class="num">{item.get("td_cost", 0):,.2f}</td>
+            <td class="num">{item.get("ad_advertisers", 0):,}</td>
+            <td class="num">{item.get("total_advertisers", 0):,}</td>
+            <td class="num {"hi" if item == top_spend else ""}>{item.get("materials", 0):,}</td>
+        </tr>'''
+    
+    insight_text = f'''<b>核心发现：</b>
+昨日服饰 AIGC 总消耗 <b>{total_spend:.1f} 万元</b>，覆盖 <b>{len(data)} 种</b> AIGC 分类标注。
+消耗最高的是「<b>{top_spend.get("aigc_type", "—")}</b>」（{top_spend.get("spend", 0):.1f} 万），
+CTR 表现最优的是「<b>{best_ctr.get("aigc_type", "—")}</b>」（{best_ctr.get("ctr", 0):.2f}%）。
+建议关注高 CTR 低 CPM 的 AIGC 类型进行扩量测试。'''
+    
+    return f'''
+    <section class="section">
+        <div class="aigc-hero">
+            <h2>🤖 服饰行业 AIGC 使用情况</h2>
+            <p>展示服饰各赛道 AIGC 分类标注的投放效果数据，包括消耗、CTR、TD 驱动占比、CPM、素材数等核心指标。数据来源：<a href="https://adata.woa.com/bi/view/10140?s=176oqS" target="_blank" style="color:#7dd3fc;text-decoration:underline">BI 报表</a></p>
+            <span class="aigc-date">📅 数据日期：{yesterday}</span>
+        </div>
+        <div class="aigc-kpis">{kpis}</div>
+        <div class="aigc-table-wrap">
+            <table class="aigc-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>AIGC 分类标注 (活跃值)</th>
+                        <th>日均消耗(万)</th>
+                        <th>有曝光<br>注主客户数</th>
+                        <th>CTR(%)</th>
+                        <th>TD驱动<br>信息量重聚(%)</th>
+                        <th>竞价CPM</th>
+                        <th>广告条数<br>消耗(元)</th>
+                        <th>TD驱动<br>信息量消耗</th>
+                        <th>有曝光<br>广告主数</th>
+                        <th>有曝光<br>广告主总数</th>
+                        <th>素材数</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        </div>
+        <div class="aigc-insight">{insight_text}</div>
+    </section>
+    '''
+
+
 def home_html():
     entries = '<a class="entry" href="https://chenxiaomei19960125-glitch.github.io/bag-shoes-creative-report/"><div class="emoji">👜</div><b>箱包鞋靴</b><span>进入既有深度站：标签树、标签分析与结论、素材逐帧剖析均保持原样。</span></a>'
     for key,m in SECTORS.items():
         entries += f'<a class="entry" href="{key}/"><div class="emoji">{m["emoji"]}</div><b>{m["name"]}</b><span>{m["desc"]}；进入独立深度分析页。</span></a>'
-    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>服饰行业创意分析</title>{STYLE}</head><body><main class="wrap"><header class="hero"><div class="eyebrow">AI 创意洞察 · 服饰行业专项</div><h1>服饰行业创意分析</h1><p>总站仅提供服饰行业整体标签树和四个赛道入口；各赛道进入后使用独立的「标签树结构 / 标签分析和结论 / 素材内容逐帧剖析」页面。</p></header><section class="section"><h2>进入赛道分析</h2><p>箱包鞋靴保留已上线的原站内容；内衣、男装和女装分别进入独立分析站。</p><div class="entry-grid">{entries}</div></section><section class="section"><h2>服饰行业整体标签树结构</h2><p>内容形式、画面客观要素为最优先的创意标签；其余标签用于补足商品决策、卖点表达和情绪营销解释。</p><div class="tree-wrap">{tree_html(OVERALL_TREE, overall=True)}</div></section><footer class="footer">服饰创意 XAI · 统一标签语言、效果归因与素材复用</footer></main></body></html>'''
+    aigc_view = _aigc_html()
+    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>服饰行业创意分析</title>{STYLE}</head><body><main class="wrap"><header class="hero"><div class="eyebrow">AI 创意洞察 · 服饰行业专项</div><h1>服饰行业创意分析</h1><p>总站仅提供服饰行业整体标签树和四个赛道入口；各赛道进入后使用独立的「标签树结构 / 标签分析和结论 / 素材内容逐帧剖析」页面。</p></header><div class="home-tabs"><button class="home-tab active" data-view="overview">📊 行业概览</button><button class="home-tab" data-view="aigc">🤖 AIGC 使用情况</button></div><div class="home-view active" id="view-overview"><section class="section"><h2>进入赛道分析</h2><p>箱包鞋靴保留已上线的原站内容；内衣、男装和女装分别进入独立分析站。</p><div class="entry-grid">{entries}</div></section><section class="section"><h2>服饰行业整体标签树结构</h2><p>内容形式、画面客观要素为最优先的创意标签；其余标签用于补足商品决策、卖点表达和情绪营销解释。</p><div class="tree-wrap">{tree_html(OVERALL_TREE, overall=True)}</div></section></div><div class="home-view" id="view-aigc">{aigc_view}</div><footer class="footer">服饰创意 XAI · 统一标签语言、效果归因与素材复用</footer></main><script>document.querySelectorAll('.home-tab').forEach(b=>b.onclick=()=>{{document.querySelectorAll('.home-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.home-view').forEach(x=>x.classList.toggle('active',x.id==='view-'+b.dataset.view))}})</script></body></html>'''
 
 STYLE = r'''<style>
-:root{--blue:#0052d9;--ink:#172b4d;--text:#33425c;--muted:#71809a;--bg:#f4f7fb;--card:#fff;--line:#e2eaf5}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.wrap{max-width:1440px;margin:auto;padding:28px 36px 56px}.hero{padding:42px;border-radius:24px;background:linear-gradient(135deg,#003ea6,#0052d9 55%,#1590f4);color:#fff;box-shadow:0 18px 42px rgba(0,82,217,.22);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-80px;top:-130px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.12)}.eyebrow{position:relative;z-index:1;display:inline-block;padding:5px 10px;border:1px solid rgba(255,255,255,.42);border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:600}.hero h1{position:relative;z-index:1;margin:16px 0 10px;font-size:34px}.hero p{position:relative;z-index:1;max-width:850px;margin:0;color:rgba(255,255,255,.9);font-size:14px;line-height:1.8}.section{margin-top:20px;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 5px 18px rgba(0,82,217,.04)}.section h2{margin:0;font-size:22px}.section>p{color:var(--muted);font-size:13px;line-height:1.75}.entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.entry{display:block;text-decoration:none;color:var(--ink);padding:22px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.2s;box-shadow:0 3px 12px rgba(0,82,217,.04)}.entry:hover{transform:translateY(-3px);border-color:#76aaff;box-shadow:0 12px 25px rgba(0,82,217,.14)}.entry .emoji{font-size:28px}.entry b{display:block;margin:11px 0 5px;font-size:18px}.entry span{font-size:12px;line-height:1.55;color:var(--muted)}.tree-wrap{display:flex;flex-direction:column;gap:14px;margin-top:18px}.tree{display:grid;grid-template-columns:220px minmax(0,1fr);border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff}.tree-main{padding:20px;background:linear-gradient(160deg,#eaf2ff,#dceaff);border-right:1px solid #cfe0fb}.tree-main strong{display:block;color:#003c9f;font-size:19px}.tree-main span{display:block;margin-top:6px;color:#4e617d;font-size:12px;line-height:1.65}.tree-main.core{background:linear-gradient(160deg,#0045bd,#006fe6)}.tree-main.core strong{color:#fff}.tree-main.core span{color:rgba(255,255,255,.87)}.tree-child{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px}.child{padding:13px;border:1px solid #e2eaf5;border-radius:10px;background:#fbfdff}.child b{display:block;color:#0052d9;font-size:14px}.child span{display:block;margin-top:6px;color:#65748c;font-size:12px;line-height:1.6}.child strong{color:#33425c}.child em{display:inline-block;margin-top:8px;padding:2px 7px;border-radius:5px;background:#e9f1ff;color:#0052d9;font-size:11px;font-style:normal;font-weight:700}.tree-scroll{overflow-x:auto}.overall-table{width:100%;min-width:1320px;border-collapse:collapse;font-size:12px}.overall-table th{padding:10px;background:#edf4ff;color:#1d4f9d;text-align:left;border-bottom:1px solid #dce8f7;white-space:nowrap}.overall-table td{padding:10px;color:#40546f;vertical-align:top;line-height:1.6;border-bottom:1px solid #edf2f8}.overall-table tr:last-child td{border-bottom:0}.overall-table .child-name{font-weight:700;color:#0052d9;white-space:nowrap}.overall-table em{display:inline-block;padding:2px 7px;border-radius:5px;background:#e9f1ff;color:#0052d9;font-size:11px;font-style:normal;font-weight:700}.footer{text-align:center;color:#91a0b6;margin-top:30px;font-size:12px}@media(max-width:1000px){.entry-grid{grid-template-columns:repeat(2,1fr)}.tree{grid-template-columns:1fr}.tree-main{border-right:0;border-bottom:1px solid #cfe0fb}.tree-child{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.wrap{padding:16px}.hero{padding:28px 24px}.hero h1{font-size:26px}.entry-grid,.tree-child{grid-template-columns:1fr}.section{padding:19px}}
+:root{--blue:#0052d9;--ink:#172b4d;--text:#33425c;--muted:#71809a;--bg:#f4f7fb;--card:#fff;--line:#e2eaf5}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.wrap{max-width:1440px;margin:auto;padding:28px 36px 56px}.hero{padding:42px;border-radius:24px;background:linear-gradient(135deg,#003ea6,#0052d9 55%,#1590f4);color:#fff;box-shadow:0 18px 42px rgba(0,82,217,.22);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-80px;top:-130px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.12)}.eyebrow{position:relative;z-index:1;display:inline-block;padding:5px 10px;border:1px solid rgba(255,255,255,.42);border-radius:999px;background:rgba(255,255,255,.13);font-size:12px;font-weight:600}.hero h1{position:relative;z-index:1;margin:16px 0 10px;font-size:34px}.hero p{position:relative;z-index:1;max-width:850px;margin:0;color:rgba(255,255,255,.9);font-size:14px;line-height:1.8}.section{margin-top:20px;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 5px 18px rgba(0,82,217,.04)}.section h2{margin:0;font-size:22px}.section>p{color:var(--muted);font-size:13px;line-height:1.75}.entry-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.entry{display:block;text-decoration:none;color:var(--ink);padding:22px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.2s;box-shadow:0 3px 12px rgba(0,82,217,.04)}.entry:hover{transform:translateY(-3px);border-color:#76aaff;box-shadow:0 12px 25px rgba(0,82,217,.14)}.entry .emoji{font-size:28px}.entry b{display:block;margin:11px 0 5px;font-size:18px}.entry span{font-size:12px;line-height:1.55;color:var(--muted)}.tree-wrap{display:flex;flex-direction:column;gap:14px;margin-top:18px}.tree{display:grid;grid-template-columns:220px minmax(0,1fr);border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff}.tree-main{padding:20px;background:linear-gradient(160deg,#eaf2ff,#dceaff);border-right:1px solid #cfe0fb}.tree-main strong{display:block;color:#003c9f;font-size:19px}.tree-main span{display:block;margin-top:6px;color:#4e617d;font-size:12px;line-height:1.65}.tree-main.core{background:linear-gradient(160deg,#0045bd,#006fe6)}.tree-main.core strong{color:#fff}.tree-main.core span{color:rgba(255,255,255,.87)}.tree-child{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px}.child{padding:13px;border:1px solid #e2eaf5;border-radius:10px;background:#fbfdff}.child b{display:block;color:#0052d9;font-size:14px}.child span{display:block;margin-top:6px;color:#65748c;font-size:12px;line-height:1.6}.child strong{color:#33425c}.child em{display:inline-block;margin-top:8px;padding:2px 7px;border-radius:5px;background:#e9f1ff;color:#0052d9;font-size:11px;font-style:normal;font-weight:700}.tree-scroll{overflow-x:auto}.overall-table{width:100%;min-width:1320px;border-collapse:collapse;font-size:12px}.overall-table th{padding:10px;background:#edf4ff;color:#1d4f9d;text-align:left;border-bottom:1px solid #dce8f7;white-space:nowrap}.overall-table td{padding:10px;color:#40546f;vertical-align:top;line-height:1.6;border-bottom:1px solid #edf2f8}.overall-table tr:last-child td{border-bottom:0}.overall-table .child-name{font-weight:700;color:#0052d9;white-space:nowrap}.overall-table em{display:inline-block;padding:2px 7px;border-radius:5px;background:#e9f1ff;color:#0052d9;font-size:11px;font-style:normal;font-weight:700}.footer{text-align:center;color:#91a0b6;margin-top:30px;font-size:12px}
+/* 首页 Tab 切换 */.home-tabs{display:flex;gap:10px;margin:22px 0}.home-tab{padding:12px 24px;border:1px solid var(--line);background:#fff;border-radius:12px;cursor:pointer;color:#60708a;font-weight:700;font-size:15px;transition:.2s}.home-tab:hover{border-color:#76aaff}.home-tab.active{background:#0052d9;color:#fff;border-color:#0052d9}.home-view{display:none}.home-view.active{display:block}
+/* AIGC 数据表格 */.aigc-hero{padding:24px 28px;border-radius:18px;background:linear-gradient(135deg,#1a1a2e,#16213e 55%,#0f3460);color:#fff;margin-bottom:20px}.aigc-hero h2{margin:0 0 8px;font-size:24px}.aigc-hero p{margin:0;color:rgba(255,255,255,.85);font-size:13px;line-height:1.7}.aigc-date{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:6px;background:rgba(255,255,255,.15);font-size:12px;font-weight:600}.aigc-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}.aigc-kpi{padding:18px;border:1px solid #e0ebfa;border-radius:13px;background:#f7faff;text-align:center}.aigc-kpi b{display:block;color:#0052d9;font-size:26px}.aigc-kpi span{display:block;margin-top:5px;color:var(--muted);font-size:12px}.aigc-table-wrap{overflow-x:auto;margin-top:18px}.aigc-table{width:100%;min-width:1500px;border-collapse:collapse;font-size:12.5px}.aigc-table thead th{padding:11px 10px;background:linear-gradient(180deg,#edf4ff,#e0ebfa);color:#1d4f9d;text-align:left;border-bottom:2px solid #c5daf7;white-space:nowrap;font-weight:700;position:sticky;top:0}.aigc-table tbody tr{transition:.15s}.aigc-table tbody tr:hover{background:#f0f6ff}.aigc-table td{padding:10px;color:#40546f;border-bottom:1px solid #edf2f8;vertical-align:middle}.aigc-table td:first-child{font-weight:700;color:#0052d9;white-space:nowrap}.aigc-table .num{text-align:right;font-variant-numeric:tabular-nums}.aigc-table .hi{font-weight:700;color:#0052d9;background:#e9f1ff;padding:2px 6px;border-radius:4px}.aigc-table .sector-tag{display:inline-block;padding:3px 9px;border-radius:6px;background:#f0f5ff;color:#0052d9;font-size:11px;font-weight:600}.aigc-insight{margin-top:18px;padding:18px 20px;border-left:4px solid #0052d9;background:linear-gradient(135deg,#f0f6ff,#f8fbff);border-radius:10px;color:#3e587b;font-size:13px;line-height:1.85}.aigc-insight b{color:#0052d9}@media(max-width:1000px){.entry-grid{grid-template-columns:repeat(2,1fr)}.tree{grid-template-columns:1fr}.tree-main{border-right:0;border-bottom:1px solid #cfe0fb}.tree-child{grid-template-columns:repeat(2,1fr)}.aigc-kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.wrap{padding:16px}.hero{padding:28px 24px}.hero h1{font-size:26px}.entry-grid,.tree-child{grid-template-columns:1fr}.section{padding:19px}.aigc-kpis{grid-template-columns:repeat(2,1fr)}}
 </style>'''
 
 SECTOR_STYLE = r'''<style>
