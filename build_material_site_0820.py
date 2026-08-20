@@ -115,15 +115,92 @@ def sample_table():
     heads=''.join(f'<th>{name}</th>' for _,name in fields)
     return f'<div class="scroll"><table class="sample"><thead><tr><th>#</th><th>产品名称</th>{heads}<th>前15秒关键帧<br>0s / 6s / 15s</th><th>素材url</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
+PAIN_COPY = {
+    '户外暴晒晒黑焦虑': '夏季暴晒/晒黑焦虑',
+    '大肚腩/胖大腿': '产后小肚腩/大腿赘肉焦虑',
+    '胖姐妹/身材焦虑': '大杯/微胖身材焦虑',
+    '显瘦/显肉': '上身显胖/遮胯显肉焦虑',
+    '粗手臂/遮副乳': '粗手臂/副乳外露焦虑',
+    '粗手臂/穿搭尴尬痛点': '粗手臂/叠穿显臃肿焦虑',
+    '大肚腩/勒腰': '大肚腩/腰头勒肉痛点',
+    '勒腰/不透气': '久穿勒腰/闷热不透气痛点',
+    '不透气': '闷热出汗/贴身不透气痛点',
+    '磨脚': '久走磨脚/脚感不舒适痛点',
+    '容量不足': '通勤随身物装不下痛点',
+    '显脸大/穿搭尴尬痛点': '发型单调/显脸大焦虑',
+    '家人平安/健康祈愿': '送礼寓意/祝福表达需求',
+}
+TEST_COPY = {
+    'UPF数值贴纸/紫外线灯测试': '冰丝凉感/UPF防晒效果展示',
+    '弹力拉伸实测': '高弹拉伸/回弹效果实测',
+    '尺码贴合实测': '上身包裹/贴合效果实测',
+    '材质透光影展示': '面料透光/垂感质感展示',
+    '承重拉扯实测': '容量分层/承重收纳展示',
+    '防水防泼实测': '防泼水/耐脏效果实测',
+    '反复水洗/耐用实测': '水洗内胆/耐用结构实测',
+    '透气透汗实测': '透气排汗/亲肤面料展示',
+    '防滑底实测': '上脚防滑/厚底脚感展示',
+}
+SCENE_COPY = {
+    '骑行/运动户外': '开车/骑行/户外防晒通勤',
+    '运动户外': '日常走路/轻运动出行',
+    '日常通勤穿搭': '上班通勤/接送孩子/周末出门',
+    '居家生活': '居家久坐/睡眠/贴身穿着',
+    '学习/求学场景': '开学上学/课本收纳整理',
+    '礼赠/婚庆': '七夕/纪念日送礼场景',
+    '旅行出行': '海边度假/旅行拍照场景',
+    '工厂溯源': '工厂现货/源头直发决策场景',
+}
+
 def formula_tags(t):
-    """黄金公式必须且仅包含三个创意标签；不使用商品名称/品类充数。"""
+    """黄金公式严格只有3个标签，但每一个必须写清具体创意元素，而非泛类目。"""
     pain=t.get('pain','')
-    hook = f'场景痛点：{pain}' if pain and pain not in {'其他','—'} else f'情绪钩子：{t.get("emotion","无明确钩子")}'
+    hook = PAIN_COPY.get(pain)
+    if not hook:
+        emotion=t.get('emotion','无明确钩子')
+        hook = f'{emotion.replace("钩子", "").replace("心理", "") }开场'
     test=t.get('test','')
-    evidence = f'功能实测：{test}' if test and test != '无实测（口播为主）' else f'功能表达：{t.get("function","其他")}'
+    evidence=TEST_COPY.get(test)
+    if not evidence:
+        evidence=f'{t.get("function","核心功能").split("/")[0]}功能表达'
     use=t.get('scene_use','')
-    scene = f'使用场景：{use}' if use and use != '—' else f'拍摄场景：{t.get("shoot","—")}'
+    scene=SCENE_COPY.get(use, use or t.get('shoot','真实场景'))
     return [hook, evidence, scene]
+
+def audience_copy(t):
+    """目标人群必须同时包含：性别/年龄 + 真实生活场景 + 具体需求。"""
+    cat=t.get('cat',''); pain=t.get('pain',''); use=t.get('scene_use','')
+    if '防晒衣' in cat:
+        return '夏季户外通勤女性 / 开车骑行族 / 30-50岁怕晒、想要轻薄防晒的女性'
+    if '冲锋衣' in cat:
+        return '周末轻户外/自驾女性 / 25-45岁 / 需要防风保暖、拍照不臃肿的人群'
+    if 'POLO' in cat:
+        return '夏季商务通勤/周末聚会男性 / 35-55岁 / 怕闷热、希望穿得得体不显老'
+    if '西裤' in cat:
+        return '春秋商务通勤男性 / 35-60岁 / 久坐怕勒腰、想显腿直且易打理的人群'
+    if '长袖T恤' in cat:
+        return '换季日常通勤男性 / 40-65岁 / 想显精神、需要多色基础打底的人群'
+    if '男士内裤' in cat:
+        return '久坐通勤/夏季易出汗男性 / 30-50岁 / 大肚腩、怕勒腰闷热的人群'
+    if '文胸' in cat or '内衣' in cat:
+        detail = '产后/久坐有小肚腩' if ('大肚腩' in pain or '塑身' in cat) else '大杯/微胖身材'
+        return f'居家与通勤女性 / 28-50岁 / {detail}、在意勒肉/外扩/闷热问题的人群'
+    if '睡衣' in cat or '睡裙' in cat:
+        return '夏季居家女性 / 20-40岁 / 睡觉怕闷热、想要宽松舒适和自带胸垫的人群'
+    if 'T恤' in cat or '上衣' in cat or '连衣裙' in cat or '背心' in cat:
+        detail = '微胖/小肚腩、需要遮胯显瘦' if ('显瘦' in pain or '显肉' in pain or '粗手臂' in pain) else '需要快速完成日常穿搭'
+        return f'上班通勤/接送孩子女性 / 25-50岁 / {detail}的人群'
+    if '女包' in cat:
+        return '上班通勤/接送孩子女性 / 28-50岁 / 手机、充电宝、钥匙等随身物较多的人群'
+    if '双肩包' in cat:
+        return '开学通勤学生与家长 / 18-45岁 / 需要分层收纳、久背减负的人群'
+    if '运动鞋' in cat:
+        return '日常走路/轻运动女性 / 20-35岁 / 想增高、怕磨脚且需要百搭的人群'
+    if '发绳' in cat or '耳环' in cat:
+        return '上班约会女性 / 18-35岁 / 想快速整理发型或修饰脸型、提升精致感的人群'
+    if '珠宝' in cat:
+        return '七夕/纪念日送礼男性及自购女性 / 25-45岁 / 看重寓意、包装和仪式感的人群'
+    return f'{use}人群 / 25-45岁 / 有「{pain if pain not in {"其他","—"} else t.get("function","核心功能")}」明确需求的人群'
 
 def frame_case(t, fr):
     phases=[('开头 0-3s', t.get('open','—'), 1), ('中间 3-9s', t.get('mid','—'), 3), ('结尾 9-15s', t.get('end','—'), 6)]
@@ -135,7 +212,7 @@ def golden_table():
         t=x['tags']; fr=f'assets/frames0820/{x["id"]}'
         labels=formula_tags(t)
         formula=''.join(f'<span class="formula-tag t{k+1}">{esc(label)}</span>' for k,label in enumerate(labels))
-        rows.append(f'<tr><td class="rank">{i}</td><td class="goldf">{formula}</td><td class="cases">{frame_case(t,fr)}</td><td class="audience">{esc(t.get("audience","—"))}</td><td>{esc(t.get("cat","—"))}</td><td><a href="{esc(x["url"])}" target="_blank">视频</a></td></tr>')
+        rows.append(f'<tr><td class="rank">{i}</td><td class="goldf">{formula}</td><td class="cases">{frame_case(t,fr)}</td><td class="audience">{esc(audience_copy(t))}</td><td>{esc(t.get("cat","—"))}</td><td><a href="{esc(x["url"])}" target="_blank">视频</a></td></tr>')
     return f'<div class="scroll"><table class="golden"><thead><tr><th>排名</th><th>黄金公式<br><small>严格只有3个创意标签</small></th><th>案例：前15秒关键帧与内容说明</th><th>目标人群</th><th>适合品类</th><th>素材url</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
 stat=raw['stat']
