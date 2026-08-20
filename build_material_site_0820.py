@@ -70,6 +70,7 @@ featured = {
         'open': '0-3s：女生拿起冰丝面罩，字幕直给「下周开始紫外线飙升」，以紫外线危机抢占注意力。',
         'mid': '3-9s：真人戴上面罩，展示 UV 检测卡并打出「UPF200+」；随后贴脸展示凉感、透气与不闷。',
         'end': '9-15s：水中浸洗面罩并展示洗后形态，字幕强调「不掉防晒力 / 不会变形褪色」；最后切户外通勤穿搭。',
+        'end_frame': 5,
         'audience_override': '户外通勤女性 / 敏感肌怕晒人群 / 25-45岁每天开车、骑行或步行出门的人群',
         'cat': '防晒装备 / 冰丝防晒口罩'
     }
@@ -248,7 +249,7 @@ def audience_copy(t):
     return f'{use}人群 / 25-45岁 / 有「{pain if pain not in {"其他","—"} else t.get("function","核心功能")}」明确需求的人群'
 
 def frame_case(t, fr):
-    phases=[('开头 0-3s', t.get('open','—'), 1), ('中间 3-9s', t.get('mid','—'), 3), ('结尾 9-15s', t.get('end','—'), 6)]
+    phases=[('开头 0-3s', t.get('open','—'), t.get('open_frame', 1)), ('中间 3-9s', t.get('mid','—'), t.get('mid_frame', 3)), ('结尾 9-15s', t.get('end','—'), t.get('end_frame', 6))]
     return ''.join(f'<div class="phase"><b>{esc(title)}</b><p>{esc(desc)}</p><img src="{fr}/{idx}.jpg" onerror="this.remove()"></div>' for title,desc,idx in phases)
 
 def golden_table():
