@@ -14,7 +14,7 @@ raw = json.loads((DATA / 'material_0820.json').read_text(encoding='utf-8'))
 manual = json.loads((DATA / 'manual_tags_0820.json').read_text(encoding='utf-8'))
 
 DIMENSIONS = [
-    ('struct', '制作类型', '内容形式'), ('season', '适用季节', '商品属性'), ('function', '功能属性', '商品属性'), ('material', '材质属性', '商品属性'),
+    ('struct', '制作类型', '内容形式'), ('season', '适用季节/节点', '商品属性'), ('function', '功能属性', '商品属性'), ('material', '材质属性', '商品属性'),
     ('test', '功能实测', '卖点表达'), ('pain', '场景痛点', '卖点表达'), ('trust', '信任背书类型', '卖点表达'), ('price', '价格/促销表达', '卖点表达'), ('compete', '竞品对比', '卖点表达'),
     ('emotion', '情绪钩子类型', '情绪与营销'), ('scene_use', '题材/使用场景', '情绪与营销'), ('festival', '节日/节点营销', '情绪与营销'), ('style', '穿搭风格类型', '情绪与营销'),
     ('shoot', '拍摄场景类型', '画面客观要素'), ('role', '出镜角色类型', '画面客观要素')]
@@ -242,7 +242,7 @@ def all_dim_data():
 
 def sample_table():
     rows=[]
-    fields=[('season','适用季节'),('function','功能属性'),('material','材质属性'),('struct','制作类型'),('test','功能实测'),('pain','场景痛点'),('trust','信任背书类型'),('price','价格/促销表达'),('compete','竞品对比'),('emotion','情绪钩子类型'),('scene_use','题材/使用场景'),('festival','节日/节点营销'),('style','穿搭风格类型'),('shoot','拍摄场景类型'),('role','出镜角色类型')]
+    fields=[('season','适用季节/节点'),('function','功能属性'),('material','材质属性'),('struct','制作类型'),('test','功能实测'),('pain','场景痛点'),('trust','信任背书类型'),('price','价格/促销表达'),('compete','竞品对比'),('emotion','情绪钩子类型'),('scene_use','题材/使用场景'),('festival','节日/节点营销'),('style','穿搭风格类型'),('shoot','拍摄场景类型'),('role','出镜角色类型')]
     for i,x in enumerate(demo,1):
         t=x['tags']; frame=f'assets/frames0820/{x["id"]}/1.jpg'
         imgs=''.join(f'<img src="assets/frames0820/{x["id"]}/{j}.jpg" onerror="this.remove()">' for j in (1,3,6))
