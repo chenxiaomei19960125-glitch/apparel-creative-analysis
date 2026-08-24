@@ -14,7 +14,7 @@ raw = json.loads((DATA / 'material_0820.json').read_text(encoding='utf-8'))
 manual = json.loads((DATA / 'manual_tags_0820.json').read_text(encoding='utf-8'))
 
 DIMENSIONS = [
-    ('struct', '视频结构类型', '内容形式'), ('season', '适用季节', '商品属性'), ('function', '功能属性', '商品属性'), ('material', '材质属性', '商品属性'),
+    ('struct', '制作类型', '内容形式'), ('season', '适用季节', '商品属性'), ('function', '功能属性', '商品属性'), ('material', '材质属性', '商品属性'),
     ('test', '功能实测', '卖点表达'), ('pain', '场景痛点', '卖点表达'), ('trust', '信任背书类型', '卖点表达'), ('price', '价格/促销表达', '卖点表达'), ('compete', '竞品对比', '卖点表达'),
     ('emotion', '情绪钩子类型', '情绪与营销'), ('scene_use', '题材/使用场景', '情绪与营销'), ('festival', '节日/节点营销', '情绪与营销'), ('style', '穿搭风格类型', '情绪与营销'),
     ('shoot', '拍摄场景类型', '画面客观要素'), ('role', '出镜角色类型', '画面客观要素')]
@@ -77,6 +77,33 @@ featured = {
 }
 golden.insert(0, featured)
 
+# ==== 用户指定的 AI 短剧素材（不在8.20表内，已单独下载并逐帧复核前15秒画面）====
+AI_DRAMA_URL = 'https://adsmind.gdtimg.com/ads_svp_video__0b536qa72aabiuaf2vlbhrvbv5ae7x2ad7ka.f0.mp4'
+ai_drama = {
+    'id': '4b96fcfd3e', 'url': AI_DRAMA_URL, 'pname': 'AI短剧 · 家庭情感冲突（服饰剧情引流）',
+    'tags': {
+        'formula_override': ['悬念反转情绪钩子（撞见老公车上有人）', 'AI生成多人剧情制作类型', '母婴亲子出镜 × 车内座驾冲突场景'],
+        'open': '0-3s：AI生成画面，孕妈牵着女儿走在街边，字幕直给「回家路上竟看到老公和别的女人在车上…」，用婚姻危机悬念抢占注意力。',
+        'mid': '3-9s：切到车内，西装男与黑色蕾丝裙女子亲密同框，冲突升级；随后孕妈侧脸特写喊「小宝」，格纹衬衫＋白吊带＋阔腿裤仅作剧情自然穿着。',
+        'end': '9-15s：女儿喊「不行」并伸手拉住车门，字幕「爸爸的副驾只有妈妈能坐」「坏阿姨」，用孩子视角完成情绪反转收尾。注：前15秒无任何服饰卖点展示或功能实测，属纯剧情引流打法。',
+        'open_frame': 1, 'mid_frame': 2, 'end_frame': 6,
+        'audience_override': '已婚已育女性 / 25-45岁 / 关注婚姻信任与家庭情感话题、易被强冲突剧情吸引的人群',
+        'cat': 'AI短剧 / 女装（剧情引流）', 'struct': 'AI生成多人剧情（AI短剧）'
+    }
+}
+
+def _pop_golden(mid):
+    for i, x in enumerate(golden):
+        if x['id'] == mid:
+            return golden.pop(i)
+    return None
+
+_polo = _pop_golden('2ba75c286e')   # 原第2位 POLO衫，按要求后移
+_shoe = _pop_golden('68533446e9')   # 原第28位 厚底运动鞋，按要求提到第4位
+golden.insert(1, ai_drama)          # 第2位：AI短剧素材
+if _shoe: golden.insert(3, _shoe)   # 第4位
+if _polo: golden.insert(11, _polo)  # 后移至第12位
+
 def tree_html():
     res=[]
     for main,desc,core,children in TAG_TREE:
@@ -84,45 +111,136 @@ def tree_html():
         res.append(f'<article class="tree"><aside class="tree-main {"core" if core else ""}"><b>{esc(main)}</b><span>{esc(desc)}</span></aside><div class="scroll"><table><thead><tr><th>二级标签</th><th>优先级</th><th>Value枚举值（各赛道可自行扩改）</th><th>判断依据/画面特征（核心Key）</th><th>二级标签分类说明</th></tr></thead><tbody>{rows}</tbody></table></div></article>')
     return ''.join(res)
 
-def metric_top(group, field, label, reverse=True):
+# ============ Tab3：统一样本池 → 15个二级标签 → 按CTR分三类输出Top3枚举值 ============
+# 关键修正：高CTR与低CTR必须在“同一个样本池、同一套枚举值排名”上取两端，
+# 否则（旧逻辑分别在 good / bad 两个子池里各自取Top3）同一枚举值会同时出现在高低两栏。
+POOL_TARGET = 500      # 目标样本量：500条去重视频样本
+MIN_SAMPLES = 3        # 单个枚举值最少样本数，低于此不参与排名（避免个别素材噪音）
+
+# 按消耗降序取前 POOL_TARGET 条去重素材作为打标样本池（不足则全量，不虚构补足）
+POOL = sorted(items, key=lambda x: n(x['spend']), reverse=True)[:POOL_TARGET]
+POOL_N = len(POOL)
+POOL_MANUAL = sum(1 for x in POOL if x['id'] in manual)   # 其中人工逐帧复核条数
+
+def tag_stats(field):
+    """在统一样本池上，按该二级标签的枚举值聚合 CTR 与 CTR 趋势。"""
     g=defaultdict(list)
-    for x in group: g[x['tags'][field]].append(x)
-    vals=[]
-    for name, xs in g.items():
-        vals.append((name, sum(n(x[label]) for x in xs)/len(xs), len(xs)))
-    vals.sort(key=lambda a:a[1], reverse=reverse)
-    return vals[:3]
+    for x in POOL:
+        v=x['tags'].get(field)
+        if v and v not in ('—',''): g[v].append(x)
+    rows=[]
+    for tag,xs in g.items():
+        if len(xs) < MIN_SAMPLES: continue      # 样本量不足不参与排名
+        multi=[x for x in xs if n(x.get('days'))>=2]   # 趋势仅用多天素材计算
+        rows.append({'tag':tag,'count':len(xs),
+                     'ctr':sum(n(x['ctr']) for x in xs)/len(xs),
+                     'v3':sum(n(x['v3']) for x in xs)/len(xs),
+                     'dur':sum(n(x['dur']) for x in xs)/len(xs),
+                     'cvr':sum(n(x['cvr']) for x in xs)/len(xs),
+                     'spend':sum(n(x['spend']) for x in xs),
+                     'slope':(sum(n(x['slope']) for x in multi)/len(multi)) if multi else None,
+                     'slope_n':len(multi)})
+    return rows
 
-def formula_for(vals, metric):
-    if not vals: return '有效样本不足'
-    return '　'.join(f'TOP{i+1} {esc(a)} <b>{b:.2f}{"%" if metric in ("ctr","v3") else "s"}</b>' for i,(a,b,c) in enumerate(vals))
+_CACHE={}
+def stats_of(field):
+    if field not in _CACHE: _CACHE[field]=tag_stats(field)
+    return _CACHE[field]
 
-def performance_table(group, title):
-    out=[]; current=None
-    for field,name,section in DIMENSIONS:
-        if section != current:
-            current=section
-            out.append(f'<tr class="section-row"><td colspan="5">{esc(section)}</td></tr>')
-        out.append(f'<tr><td>{esc(name)}</td><td>{formula_for(metric_top(group,field,"v3"),"v3")}</td><td>{formula_for(metric_top(group,field,"dur"),"dur")}</td><td>{formula_for(metric_top(group,field,"ctr"),"ctr")}</td><td><button class="detail" data-dim="{field}" data-group="{title}">查看完整表现</button></td></tr>')
+def top3_high(field):
+    rows=sorted(stats_of(field), key=lambda r:r['ctr'], reverse=True)
+    return rows[:3]
+
+def top3_low(field):
+    high={r['tag'] for r in top3_high(field)}
+    # 显式排除已进入高CTR板块的枚举值，保证两个板块绝不重叠
+    rows=[r for r in sorted(stats_of(field), key=lambda r:r['ctr']) if r['tag'] not in high]
+    return rows[:3]
+
+def top3_rising(field):
+    rows=[r for r in stats_of(field) if r['slope'] is not None and r['slope']>0]
+    rows.sort(key=lambda r:r['slope'], reverse=True)
+    return rows[:3]
+
+KINDS={'high':('ctr 高','ctr'),'low':('ctr 低','ctr'),'rising':('ctr 上升趋势','slope')}
+
+# 已成功抽帧的素材（只有这些能给出真实画面证据，不做任何示意图/占位图）
+FRAME_IDS={p.name for p in FRAMES.iterdir() if p.is_dir() and any(p.glob('*.jpg'))} if FRAMES.exists() else set()
+
+def rep_material(field, tag, kind):
+    """为某枚举值挑一条“有真实关键帧”的代表素材，作为可核对证据。"""
+    xs=[x for x in POOL if x['tags'].get(field)==tag and x['id'] in FRAME_IDS]
+    if not xs: return None
+    if kind=='rising': xs.sort(key=lambda x: n(x['slope']), reverse=True)
+    elif kind=='low':  xs.sort(key=lambda x: n(x['ctr']))
+    else:              xs.sort(key=lambda x: n(x['ctr']), reverse=True)
+    return xs[0]
+
+def _thumb(x):
+    if not x:
+        return '<span class="noshot">该枚举值样本未抽帧<br>暂无画面证据</span>'
+    d=FRAMES/x['id']; idx=None
+    for i in (3,1,2,4,5,6):
+        if (d/f'{i}.jpg').exists(): idx=i; break
+    if idx is None:
+        return '<span class="noshot">暂无画面证据</span>'
+    pn=x['tags'].get('pn') or x.get('pname') or ''
+    return (f'<a class="shot" href="{esc(x["url"])}" target="_blank" '
+            f'title="点击打开原视频核对：{esc(pn)}（CTR {n(x["ctr"]):.2f}%）">'
+            f'<img src="assets/frames0820/{x["id"]}/{idx}.jpg" loading="lazy" onerror="this.remove()">'
+            f'<span class="cap">{esc(pn)[:12]}<br>CTR {n(x["ctr"]):.2f}%</span></a>')
+
+def _kind_cell(field, kind):
+    pick={'high':top3_high,'low':top3_low,'rising':top3_rising}[kind]
+    rows=pick(field)
+    if not rows: return '<span class="na">有效枚举值不足</span>'
+    out=[]
+    for i,r in enumerate(rows,1):
+        metric=(f'CTR趋势 +{r["slope"]:.2f}pp · 现CTR {r["ctr"]:.2f}%' if kind=='rising'
+                else f'CTR {r["ctr"]:.2f}%')
+        out.append(f'<div class="item"><div class="txt"><b>TOP{i}</b>'
+                   f'<span class="tg">{esc(r["tag"])}</span>'
+                   f'<i>{metric}</i></div>{_thumb(rep_material(field,r["tag"],kind))}</div>')
     return ''.join(out)
 
+def combo_table():
+    """三类合并为一张表：一级分类 | 二级标签 | ctr高 | ctr低 | ctr上升趋势。"""
+    order=[]
+    for field,name,section in DIMENSIONS:
+        if not order or order[-1][0]!=section: order.append((section,[]))
+        order[-1][1].append((field,name))
+    rows=[]
+    for section,dims in order:
+        for i,(field,name) in enumerate(dims):
+            tds=''
+            if i==0: tds+=f'<td class="sect" rowspan="{len(dims)}">{esc(section)}</td>'
+            tds+=f'<td class="dim">{esc(name)}</td>'
+            for kind in ('high','low','rising'):
+                tds+=f'<td class="kcell {kind}">{_kind_cell(field,kind)}</td>'
+            tds+=f'<td class="act"><button class="detail" data-dim="{field}" data-kind="all">查看完整表现</button></td>'
+            rows.append(f'<tr>{tds}</tr>')
+    return ('<div class="scroll"><table class="combo"><thead><tr>'
+            '<th>一级分类</th><th>排序 / 维度</th><th class="h">ctr 高</th>'
+            '<th class="l">ctr 低</th><th class="r">ctr 上升趋势</th><th>明细</th>'
+            f'</tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
+
 def all_dim_data():
-    groups={'good':good,'bad':bad,'rising':rising}
+    """每个二级标签在统一样本池上的完整枚举值排名，供弹窗展示。"""
     o={}
-    for gname,arr in groups.items():
-        o[gname]={}
-        for field,name,sec in DIMENSIONS:
-            gg=defaultdict(list)
-            for x in arr: gg[x['tags'][field]].append(x)
-            rows=[]
-            for tag,xs in gg.items():
-                rows.append({'tag':tag,'count':len(xs),'v3':round(sum(n(x['v3']) for x in xs)/len(xs),2),'dur':round(sum(n(x['dur']) for x in xs)/len(xs),2),'ctr':round(sum(n(x['ctr']) for x in xs)/len(xs),2),'cvr':round(sum(n(x['cvr']) for x in xs)/len(xs),2),'spend':round(sum(n(x['spend']) for x in xs),2)})
-            o[gname][field]=sorted(rows,key=lambda r:r['ctr'],reverse=True)
+    for field,name,sec in DIMENSIONS:
+        rows=[]
+        for r in sorted(stats_of(field), key=lambda r:r['ctr'], reverse=True):
+            rows.append({'tag':r['tag'],'count':r['count'],
+                         'ctr':round(r['ctr'],2),'v3':round(r['v3'],2),
+                         'dur':round(r['dur'],2),'cvr':round(r['cvr'],2),
+                         'spend':round(r['spend'],2),
+                         'slope':(round(r['slope'],2) if r['slope'] is not None else None)})
+        o[field]={'name':name,'rows':rows}
     return o
 
 def sample_table():
     rows=[]
-    fields=[('season','适用季节'),('function','功能属性'),('material','材质属性'),('struct','视频结构类型'),('test','功能实测'),('pain','场景痛点'),('trust','信任背书类型'),('price','价格/促销表达'),('compete','竞品对比'),('emotion','情绪钩子类型'),('scene_use','题材/使用场景'),('festival','节日/节点营销'),('style','穿搭风格类型'),('shoot','拍摄场景类型'),('role','出镜角色类型')]
+    fields=[('season','适用季节'),('function','功能属性'),('material','材质属性'),('struct','制作类型'),('test','功能实测'),('pain','场景痛点'),('trust','信任背书类型'),('price','价格/促销表达'),('compete','竞品对比'),('emotion','情绪钩子类型'),('scene_use','题材/使用场景'),('festival','节日/节点营销'),('style','穿搭风格类型'),('shoot','拍摄场景类型'),('role','出镜角色类型')]
     for i,x in enumerate(demo,1):
         t=x['tags']; frame=f'assets/frames0820/{x["id"]}/1.jpg'
         imgs=''.join(f'<img src="assets/frames0820/{x["id"]}/{j}.jpg" onerror="this.remove()">' for j in (1,3,6))
@@ -169,47 +287,25 @@ SCENE_COPY = {
 }
 
 def formula_tags(t):
-    """黄金公式严格为按视频先后顺序的三段完整打法句式。"""
+    """黄金公式：最多3个创意标签，标签可来自15个二级标签中的任意维度。
+    优先取人工逐帧复核（基于真实前15秒画面/字幕）写下的公式，避免模板套死与画面不符。"""
     if t.get('formula_override'):
-        return t['formula_override']
-    pain=t.get('pain','')
-    price=t.get('price','')
-    # 限时清仓类素材以利益钩子优先，不硬套痛点。
-    if pain == '户外暴晒晒黑焦虑':
-        hook='分节晒黑痛点场景'
-    elif '清仓' in price or '捡漏' in price:
-        hook='大牌清仓限时钩子'
-    else:
-        hook=PAIN_COPY.get(pain)
-    if not hook:
-        emotion=t.get('emotion','无明确钩子')
-        hook=f'{emotion.replace("钩子", "").replace("心理", "")}创意钩子'
-
-    test=t.get('test','')
-    cat=t.get('cat','')
-    fn=t.get('function','核心功能')
-    # 功能实拍要把“测什么”与“拍什么”写出来，不能只写泛化标签。
-    if '防晒衣' in cat:
-        evidence='冰丝透气/UPF防晒实测演示'
-    elif 'POLO' in cat:
-        evidence='速干透气翻领绣标实拍'
-    elif '西裤' in cat:
-        evidence='垂感弹力裤型实拍演示'
-    elif '文胸' in cat or '内衣' in cat:
-        evidence='聚拢贴合/高弹回弹实测演示'
-    elif 'T恤' in cat or '上衣' in cat:
-        evidence='显瘦版型/面料上身实拍'
-    else:
-        evidence=TEST_COPY.get(test)
-    if not evidence:
-        evidence=f'{fn.split("/")[0]}功能实拍展示'
-
-    use=t.get('scene_use','')
-    scene=SCENE_COPY.get(use, use or t.get('shoot','真实使用场景'))
-    # 清仓素材强调适合囤货/送礼；其他仍保留真实使用场景。
-    if ('清仓' in price or '捡漏' in price) and pain != '户外暴晒晒黑焦虑':
-        scene='全家人囤货/送礼场景'
-    return [hook, evidence, scene]
+        return [p for p in t['formula_override'] if p][:3]
+    # 人工复核公式（真实画面依据），按 ' + ' 拆分，最多3个
+    if t.get('formula'):
+        parts=[p.strip() for p in str(t['formula']).replace('＋','+').split('+') if p.strip()]
+        if parts:
+            return parts[:3]
+    # 仅当完全没有人工公式时才走保守兜底：只用该素材已有的真实标签，不臆造场景
+    fallback_tags=[]
+    for key in ('emotion','pain','test','function','struct','trust','price','compete',
+                'material','style','scene_use','shoot','role'):
+        v=t.get(key)
+        if v and v not in ('—','','其他','无背书','无对比','无明确钩子','无节日营销',
+                           '无明显价格促销','无实测（口播为主）','未识别（信息不足）'):
+            fallback_tags.append(str(v))
+        if len(fallback_tags)>=3: break
+    return fallback_tags[:3] if fallback_tags else ['前15秒画面信息不足，未生成公式']
 
 def audience_copy(t):
     """目标人群必须同时包含：性别/年龄 + 真实生活场景 + 具体需求。"""
@@ -261,13 +357,68 @@ def golden_table():
         rows.append(f'<tr><td class="rank">{i}</td><td class="goldf">{formula}</td><td class="cases">{frame_case(t,fr)}</td><td class="audience">{esc(audience_copy(t))}</td><td>{esc(t.get("cat","—"))}</td><td><a href="{esc(x["url"])}" target="_blank">视频</a></td></tr>')
     return f'<div class="scroll"><table class="golden"><thead><tr><th>排名</th><th>黄金公式<br><small>严格只有3个创意标签</small></th><th>案例：前15秒关键帧与内容说明</th><th>目标人群</th><th>适合品类</th><th>素材url</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
 
+SECTORS = [
+    ('大盘创意数据', '服饰行业整体创意数据看板（内网 BI，需登录访问）', '📊', 'bi',
+     'https://adata.woa.com/bi/artifact/a853f982-58e8-4c76-9039-46aa8aa619da/%E6%9C%8D%E9%A5%B0%E5%88%9B%E6%84%8F%E6%95%B0%E6%8D%AE%E7%9C%8B%E6%9D%BF_v3.html'),
+    ('箱包鞋靴', '箱包 / 鞋靴分 Tab 创意分析，含 Top 素材关键帧与 Learning', '👜', '',
+     'https://chenxiaomei19960125-glitch.github.io/bag-shoes-creative-report/'),
+    ('配饰', '墨镜 / 太阳镜等配饰品类创意分析看板', '🕶️', '',
+     'https://lihaiyou80-ux.github.io/jewelry-creative-report/cat_%E5%A2%A8%E9%95%9C-%E5%A4%AA%E9%98%B3%E9%95%9C.html'),
+    ('内衣', '文胸品类创意分析看板 v4', '👙', '',
+     'https://johnsywang.github.io/johnsywang/wenxiong-creative-v4/'),
+    ('男装', '男装品类创意视频分析看板', '👔', '',
+     'https://menclothingvideo.netlify.app/'),
+]
+
+def sector_cards():
+    cards=[]
+    for name,desc,icon,flag,url in SECTORS:
+        badge='<span class="badge">内网</span>' if flag=='bi' else ''
+        cards.append(f'<a class="scard {flag}" href="{esc(url)}" target="_blank" rel="noopener">'
+                     f'<div class="sicon">{icon}</div>'
+                     f'<div class="sbody"><b>{esc(name)}{badge}</b><p>{esc(desc)}</p></div>'
+                     f'<div class="sgo">进入看板 →</div></a>')
+    return f'<div class="sgrid">{"".join(cards)}</div>'
+
 stat=raw['stat']
-summary=f'''<div class="rule"><b>优质素材筛选口径：</b>CTR 为第一优先级，平均播放时长、3秒完播率为次要参考；所有打标和案例仅分析前15秒。<br><b>样本：</b>去重 {raw['total']} 条；优质 {len(good)} 条；CTR低 {len(bad)} 条；CTR上升 {len(rising)} 条（原始数据仅支持识别 {len(rising)} 条至少两天且 CTR 上升的素材，未虚构补足100条）。</div>'''
 STYLE='''<style>
-:root{--blue:#1668dc;--ink:#172b4d;--muted:#65758c;--line:#d9e5f3;--bg:#f4f7fb;--soft:#f5f9ff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.wrap{max-width:1540px;margin:auto;padding:26px 28px 60px}.hero{padding:32px 36px;color:#fff;border-radius:22px;background:linear-gradient(135deg,#003c9c,#0052d9 58%,#1797f5)}.hero h1{margin:8px 0;font-size:30px}.hero p{margin:0;line-height:1.7;color:#e8f2ff}.tabs{display:flex;gap:9px;margin:20px 0}.tab{border:1px solid var(--line);background:#fff;color:#51647f;border-radius:11px;padding:13px 18px;font-size:14px;font-weight:700;cursor:pointer}.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}.view{display:none}.view.active{display:block}.section{margin-top:16px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 4px 16px rgba(0,82,217,.04)}h2{margin:0 0 9px;font-size:20px}p{line-height:1.7}.hint,.rule{padding:13px 16px;border-left:4px solid var(--blue);background:#eef5ff;color:#48617e;font-size:13px;line-height:1.75;border-radius:7px}.tree{display:grid;grid-template-columns:210px minmax(0,1fr);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-top:13px}.tree-main{padding:17px;background:#edf4ff}.tree-main.core{background:linear-gradient(160deg,#0045bd,#006fe6);color:#fff}.tree-main b{display:block;font-size:17px}.tree-main span{display:block;margin-top:6px;font-size:12px;line-height:1.65}.scroll{overflow:auto}.tree table,.sample,.golden,.perf{border-collapse:collapse;width:100%;min-width:1050px;font-size:12px}.tree th,.sample th,.golden th,.perf th{background:#edf4ff;color:#164c9c;text-align:left;padding:9px;border:1px solid #d9e5f3;white-space:nowrap}.tree td,.sample td,.golden td,.perf td{padding:9px;border:1px solid #e2ebf5;vertical-align:top;line-height:1.6;color:#40546f}.tree .sub{font-weight:700;color:#0052d9;white-space:nowrap}.tree i{font-style:normal;font-weight:700;color:#0052d9;background:#e8f1ff;padding:2px 5px;border-radius:4px}.sample{min-width:2600px}.sample .product{min-width:190px;font-weight:700;color:#0052d9}.sample td{max-width:145px}.sample .shot,.frames{min-width:300px}.sample img,.frames img{width:90px;height:140px;object-fit:cover;border-radius:5px;margin-right:4px;background:#eef2f7}.golden{min-width:1450px}.golden th{background:#1463df;color:#fff;text-align:center}.golden th small{font-weight:500;color:#dbeaff}.golden td{font-size:13px}.golden .rank{font-weight:800;text-align:center;color:#0052d9;font-size:16px}.goldf{min-width:270px;font-weight:700;vertical-align:middle!important}.formula-tag{display:inline-block;padding:8px 9px;margin:5px 2px;border-radius:7px;line-height:1.45}.formula-plus{display:inline-block;padding:0 3px;color:#0052d9;font-size:17px;vertical-align:middle}.formula-tag.t1{background:#e3f5ec;color:#137c4d}.formula-tag.t2{background:#e8f1ff;color:#0052d9}.formula-tag.t3{background:#fff3d7;color:#a55d00}.cases{min-width:560px;padding:0!important}.phase{display:inline-block;width:33.333%;min-height:250px;vertical-align:top;padding:9px;border-right:1px solid #dfe8f5;background:#fff}.phase:last-child{border-right:0}.phase b{display:block;color:#1c477f;font-size:12px}.phase p{height:52px;margin:5px 0 8px;color:#566a85;font-size:11px;line-height:1.45;overflow:hidden}.phase img{display:block;width:100%;height:170px;object-fit:cover;border-radius:4px;background:#edf2f7}.golden .audience{min-width:175px;font-weight:700;color:#334f72}.dash{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.panel{border:1px solid var(--line);border-radius:14px;overflow:hidden}.panel h3{margin:0;padding:14px 15px;background:#f0f6ff;color:#0045bd;font-size:15px}.panel .mini{padding:12px;color:#64738a;font-size:12px}.perf{min-width:980px}.section-row td{background:#f4f8ff!important;color:#0045bd!important;font-weight:700!important}.detail{color:#0052d9;background:#fff;border:1px solid #b9d4ff;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}.modal{display:none;position:fixed;inset:0;background:rgba(12,28,55,.45);z-index:10;padding:8vh 8vw}.modal.open{display:block}.dialog{max-height:84vh;overflow:auto;background:#fff;border-radius:16px;padding:20px}.close{float:right;border:0;background:#eaf2ff;color:#0052d9;padding:6px 10px;border-radius:6px;cursor:pointer}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.legend span{padding:5px 9px;background:#f0f6ff;color:#0052d9;border-radius:999px;font-size:12px}.footer{text-align:center;color:#8190a8;font-size:12px;margin-top:28px}@media(max-width:900px){.wrap{padding:16px}.tabs{overflow:auto}.tree{grid-template-columns:1fr}.dash{grid-template-columns:1fr}.hero{padding:24px}.hero h1{font-size:25px}}
+:root{--blue:#1668dc;--ink:#172b4d;--muted:#65758c;--line:#d9e5f3;--bg:#f4f7fb;--soft:#f5f9ff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.wrap{max-width:1540px;margin:auto;padding:26px 28px 60px}.hero{padding:32px 36px;color:#fff;border-radius:22px;background:linear-gradient(135deg,#003c9c,#0052d9 58%,#1797f5)}.hero h1{margin:8px 0;font-size:30px}.hero p{margin:0;line-height:1.7;color:#e8f2ff}.tabs{display:flex;gap:9px;margin:20px 0}.tab{border:1px solid var(--line);background:#fff;color:#51647f;border-radius:11px;padding:13px 18px;font-size:14px;font-weight:700;cursor:pointer}.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}.view{display:none}.view.active{display:block}.section{margin-top:16px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 4px 16px rgba(0,82,217,.04)}h2{margin:0 0 9px;font-size:20px}p{line-height:1.7}.hint,.rule{padding:13px 16px;border-left:4px solid var(--blue);background:#eef5ff;color:#48617e;font-size:13px;line-height:1.75;border-radius:7px}.tree{display:grid;grid-template-columns:210px minmax(0,1fr);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-top:13px}.tree-main{padding:17px;background:#edf4ff}.tree-main.core{background:linear-gradient(160deg,#0045bd,#006fe6);color:#fff}.tree-main b{display:block;font-size:17px}.tree-main span{display:block;margin-top:6px;font-size:12px;line-height:1.65}.scroll{overflow:auto}.tree table,.sample,.golden,.perf{border-collapse:collapse;width:100%;min-width:1050px;font-size:12px}.tree th,.sample th,.golden th,.perf th{background:#edf4ff;color:#164c9c;text-align:left;padding:9px;border:1px solid #d9e5f3;white-space:nowrap}.tree td,.sample td,.golden td,.perf td{padding:9px;border:1px solid #e2ebf5;vertical-align:top;line-height:1.6;color:#40546f}.tree .sub{font-weight:700;color:#0052d9;white-space:nowrap}.tree i{font-style:normal;font-weight:700;color:#0052d9;background:#e8f1ff;padding:2px 5px;border-radius:4px}.sample{min-width:2600px}.sample .product{min-width:190px;font-weight:700;color:#0052d9}.sample td{max-width:145px}.sample .shot,.frames{min-width:300px}.sample img,.frames img{width:90px;height:140px;object-fit:cover;border-radius:5px;margin-right:4px;background:#eef2f7}.golden{min-width:1450px}.golden th{background:#1463df;color:#fff;text-align:center}.golden th small{font-weight:500;color:#dbeaff}.golden td{font-size:13px}.golden .rank{font-weight:800;text-align:center;color:#0052d9;font-size:16px}.goldf{min-width:270px;font-weight:700;vertical-align:middle!important}.formula-tag{display:inline-block;padding:8px 9px;margin:5px 2px;border-radius:7px;line-height:1.45}.formula-plus{display:inline-block;padding:0 3px;color:#0052d9;font-size:17px;vertical-align:middle}.formula-tag.t1{background:#e3f5ec;color:#137c4d}.formula-tag.t2{background:#e8f1ff;color:#0052d9}.formula-tag.t3{background:#fff3d7;color:#a55d00}.cases{min-width:560px;padding:0!important}.phase{display:inline-block;width:33.333%;min-height:250px;vertical-align:top;padding:9px;border-right:1px solid #dfe8f5;background:#fff}.phase:last-child{border-right:0}.phase b{display:block;color:#1c477f;font-size:12px}.phase p{height:52px;margin:5px 0 8px;color:#566a85;font-size:11px;line-height:1.45;overflow:hidden}.phase img{display:block;width:100%;height:170px;object-fit:cover;border-radius:4px;background:#edf2f7}.golden .audience{min-width:175px;font-weight:700;color:#334f72}.dash{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.panel{border:1px solid var(--line);border-radius:14px;overflow:hidden}.panel h3{margin:0;padding:14px 15px;background:#f0f6ff;color:#0045bd;font-size:15px}.panel .mini{padding:12px;color:#64738a;font-size:12px}.perf{min-width:980px;font-size:13px}.dash.single{grid-template-columns:1fr}.dash.single .perf{min-width:100%}.dash.single .perf th:first-child,.dash.single .perf td:first-child{width:150px;font-weight:700;color:#0045bd}.dash.single .perf th:last-child,.dash.single .perf td:last-child{width:120px;text-align:center}.dash.single .perf td{padding:11px 12px;white-space:normal}.dash.single .perf td b{color:#0052d9}.panel.high h3{background:#e8f7ee;color:#0b7a41}.panel.low h3{background:#fdeceb;color:#b42318}.panel.rise h3{background:#fff4e0;color:#a55d00}.rank .dim{font-weight:700;color:#0045bd;white-space:nowrap}.rank td{vertical-align:top}.tagv{display:block;font-size:13px;line-height:1.5;color:#17233d}.mv{display:block;margin-top:4px;font-size:12px;font-weight:700;color:#0052d9}.mv.up{color:#0b7a41}.mn{display:block;margin-top:2px;font-size:11px;color:#8a95a8;font-weight:400}.panel.high .tagv{color:#0b7a41}.panel.low .tagv{color:#b42318}.panel.rise .tagv{color:#a55d00}.panel.low .mv{color:#b42318}.na{color:#aab;font-size:12px}
+.mini .ch{color:#0b7a41}.mini .cl{color:#b42318}.mini .cr{color:#a55d00}
+.combo{border-collapse:collapse;width:100%;min-width:1180px;font-size:12px}
+.combo th{background:#edf4ff;color:#164c9c;text-align:left;padding:10px 9px;border:1px solid #d9e5f3;white-space:nowrap}
+.combo th.h{background:#e8f7ee;color:#0b7a41}.combo th.l{background:#fdeceb;color:#b42318}.combo th.r{background:#fff4e0;color:#a55d00}
+.combo td{padding:8px 9px;border:1px solid #e2ebf5;vertical-align:top}
+.combo .sect{background:#f4f8ff;color:#0045bd;font-weight:800;font-size:13px;width:86px;vertical-align:middle;text-align:center}
+.combo .dim{font-weight:700;color:#17233d;width:104px;background:#fafcff}
+.combo .kcell{width:auto;min-width:250px}
+.combo .act{width:96px;text-align:center;vertical-align:middle}
+.combo .item{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed #e6edf6}
+.combo .item:last-child{border-bottom:0}
+.combo .item .txt{flex:1;min-width:0}
+.combo .item .txt b{display:inline-block;background:#eef4ff;color:#0052d9;border-radius:4px;padding:1px 5px;font-size:10px;margin-right:4px}
+.combo .item .tg{font-weight:700;font-size:12.5px;line-height:1.45;color:#17233d}
+.combo .item .txt i{display:block;margin-top:3px;font-style:normal;font-size:11px;font-weight:700;color:#0052d9}
+.combo .high .tg{color:#0b7a41}.combo .low .tg{color:#b42318}.combo .rising .tg{color:#a55d00}
+.combo .high .txt i{color:#0b7a41}.combo .low .txt i{color:#b42318}.combo .rising .txt i{color:#a55d00}
+.shot{flex:none;width:56px;text-decoration:none;display:block}
+.shot img{display:block;width:56px;height:84px;object-fit:cover;border-radius:5px;background:#eef2f7;border:1px solid #dde6f2}
+.shot .cap{display:block;margin-top:3px;font-size:9px;line-height:1.3;color:#7d8ba0;text-align:center}
+.shot:hover img{border-color:#0052d9;box-shadow:0 2px 8px rgba(0,82,217,.25)}
+.noshot{flex:none;width:56px;font-size:9px;line-height:1.3;color:#b3bccb;text-align:center;border:1px dashed #dde6f2;border-radius:5px;padding:6px 2px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-top:14px}
+.scard{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;text-decoration:none;color:inherit;transition:.18s}
+.scard:hover{border-color:#0052d9;box-shadow:0 8px 22px rgba(0,82,217,.14);transform:translateY(-2px)}
+.scard.bi{background:linear-gradient(135deg,#f2f7ff,#fff);border-color:#b9d4ff}
+.sicon{flex:none;width:52px;height:52px;border-radius:13px;background:#eef4ff;display:grid;place-items:center;font-size:26px}
+.sbody{flex:1;min-width:0}
+.sbody b{display:block;font-size:16px;color:#17233d}
+.sbody p{margin:4px 0 6px;font-size:12px;color:#65758c;line-height:1.55}
+.surl{display:block;font-size:10px;color:#9aa7ba;word-break:break-all;line-height:1.4}
+.badge{display:inline-block;margin-left:7px;padding:1px 7px;border-radius:9px;background:#fff3d7;color:#a55d00;font-size:10px;vertical-align:middle}
+.sgo{flex:none;color:#0052d9;font-size:12px;font-weight:700;white-space:nowrap}.section-row td{background:#f4f8ff!important;color:#0045bd!important;font-weight:700!important}.detail{color:#0052d9;background:#fff;border:1px solid #b9d4ff;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}.modal{display:none;position:fixed;inset:0;background:rgba(12,28,55,.45);z-index:10;padding:8vh 8vw}.modal.open{display:block}.dialog{max-height:84vh;overflow:auto;background:#fff;border-radius:16px;padding:20px}.close{float:right;border:0;background:#eaf2ff;color:#0052d9;padding:6px 10px;border-radius:6px;cursor:pointer}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.legend span{padding:5px 9px;background:#f0f6ff;color:#0052d9;border-radius:999px;font-size:12px}.footer{text-align:center;color:#8190a8;font-size:12px;margin-top:28px}@media(max-width:900px){.wrap{padding:16px}.tabs{overflow:auto}.tree{grid-template-columns:1fr}.dash{grid-template-columns:1fr}.hero{padding:24px}.hero h1{font-size:25px}}
 </style>'''
 DIMJSON=json.dumps(all_dim_data(),ensure_ascii=False)
-PAGE=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>服饰素材创意打标分析 · 8.20</title>{STYLE}</head><body><main class="wrap"><header class="hero"><div>服饰创意洞察 · 素材8.20</div><h1>服饰素材创意打标分析</h1><p>标签树、行业素材打标实操、创意元素表现与素材起量黄金公式。所有单条素材仅按前15秒画面和可见字幕打标。</p></header><nav class="tabs"><button class="tab active" data-v="tree">1. 服饰素材标签树结构</button><button class="tab" data-v="demo">2. 行业素材打标实操</button><button class="tab" data-v="performance">3. 创意元素表现</button><button class="tab" data-v="golden">4. 素材起量黄金公式</button></nav><div id="tree" class="view active"><section class="section"><h2>服饰素材标签树结构</h2><div class="hint">直接按业务标签框架呈现：内容形式、画面客观要素作为 p00 核心标签；其余用于解释商品属性、卖点表达与情绪营销。Value 枚举按截图内容整理。</div>{tree_html()}</section></div><div id="demo" class="view"><section class="section"><h2>行业素材打标实操</h2><p>选取消耗较高的 30 条素材作为示范。<b>“产品名称”</b>对应原表中的推广产品ID（翻译后）；每条标签仅基于 0-15 秒关键帧。</p>{sample_table()}</section></div><div id="performance" class="view"><section class="section"><h2>创意元素表现</h2>{summary}<div class="legend"><span>指标排序：3秒完播率</span><span>平均播放时长</span><span>CTR表现</span><span>点击“查看完整表现”可查看各标签完整分布</span></div><div class="dash"><article class="panel"><h3>优质素材（200条）</h3><div class="mini">CTR 高为第一优先级，播放时长与3秒完播为次要参考。</div><div class="scroll"><table class="perf"><thead><tr><th>排序/维度</th><th>3s 完播率表现</th><th>平均播放时长表现</th><th>CTR 表现</th><th>明细</th></tr></thead><tbody>{performance_table(good,'good')}</tbody></table></div></article><article class="panel"><h3>CTR低素材（200条）</h3><div class="mini">用于反向识别低点击标签组合与应规避元素。</div><div class="scroll"><table class="perf"><thead><tr><th>排序/维度</th><th>3s 完播率表现</th><th>平均播放时长表现</th><th>CTR 表现</th><th>明细</th></tr></thead><tbody>{performance_table(bad,'bad')}</tbody></table></div></article><article class="panel"><h3>CTR上升趋势素材（{len(rising)}条）</h3><div class="mini">数据中仅识别到 {len(rising)} 条至少两天且 CTR 上升的素材，按真实数据呈现。</div><div class="scroll"><table class="perf"><thead><tr><th>排序/维度</th><th>3s 完播率表现</th><th>平均播放时长表现</th><th>CTR 表现</th><th>明细</th></tr></thead><tbody>{performance_table(rising,'rising')}</tbody></table></div></article></div></section></div><div id="golden" class="view"><section class="section"><h2>素材起量黄金公式</h2><p>只保留已逐帧复核的真人口播、实拍展示或剧情素材；<b>普通图片轮播 / AI图文素材已全部剔除</b>。每条公式严格只有 <b>3 个创意标签</b>（场景痛点/情绪钩子、功能实测/功能表达、使用场景），并配开头/中间/结尾前15秒文字说明与不同关键帧。目标人群明确到年龄、性别、场景和诉求。</p>{golden_table()}</section></div><footer class="footer">素材8.20 · 前15秒创意分析 · 数据来源：用户提供表格</footer></main><div id="modal" class="modal"><div class="dialog"><button id="close" class="close">关闭</button><h2 id="mtitle">标签明细</h2><div id="mbody"></div></div></div><script>const DATA={DIMJSON};const names={{good:'优质素材',bad:'CTR低素材',rising:'CTR上升趋势素材'}};document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===b.dataset.v))}});document.querySelectorAll('.detail').forEach(b=>b.onclick=()=>{{let rows=DATA[b.dataset.group][b.dataset.dim]||[];document.getElementById('mtitle').textContent=names[b.dataset.group]+' · '+b.closest('tr').children[0].textContent+' 标签明细';document.getElementById('mbody').innerHTML='<div class="scroll"><table class="perf"><thead><tr><th>标签</th><th>素材数</th><th>消耗(万)</th><th>CTR</th><th>平均播放时长</th><th>3秒完播率</th><th>CVR</th></tr></thead><tbody>'+rows.map(r=>`<tr><td>${{r.tag}}</td><td>${{r.count}}</td><td>${{r.spend}}</td><td>${{r.ctr}}%</td><td>${{r.dur}}s</td><td>${{r.v3}}%</td><td>${{r.cvr}}%</td></tr>`).join('')+'</tbody></table></div>';document.getElementById('modal').classList.add('open')}});document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('open');</script></body></html>'''
+PAGE=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>服饰素材创意打标分析 · 8.20</title>{STYLE}</head><body><main class="wrap"><header class="hero"><div>服饰创意洞察 · 素材8.20</div><h1>服饰素材创意打标分析</h1><p>标签树、行业素材打标实操、创意元素表现与素材起量黄金公式。所有单条素材仅按前15秒画面和可见字幕打标。</p></header><nav class="tabs"><button class="tab active" data-v="tree">1. 服饰素材标签树结构</button><button class="tab" data-v="demo">2. 行业素材打标实操</button><button class="tab" data-v="performance">3. 创意元素表现</button><button class="tab" data-v="golden">4. 素材起量黄金公式</button><button class="tab" data-v="sector">5. 服饰分行业看板汇总</button></nav><div id="tree" class="view active"><section class="section"><h2>服饰素材标签树结构</h2><div class="hint">直接按业务标签框架呈现：内容形式、画面客观要素作为 p00 核心标签；其余用于解释商品属性、卖点表达与情绪营销。Value 枚举按截图内容整理。</div>{tree_html()}</section></div><div id="demo" class="view"><section class="section"><h2>行业素材打标实操</h2><p>选取消耗较高的 30 条素材作为示范。<b>“产品名称”</b>对应原表中的推广产品ID（翻译后）；每条标签仅基于 0-15 秒关键帧。</p>{sample_table()}</section></div><div id="performance" class="view"><section class="section"><h2>创意元素表现</h2><div class="rule">仅识别前15秒画面，若需更精准结论建议扩充人工复核量。</div><div class="dash single"><article class="panel"><h3>创意标签 CTR 三类表现（合并视图）</h3><div class="mini">同一张表对比：<b class="ch">ctr 高</b> / <b class="cl">ctr 低</b> / <b class="cr">ctr 上升趋势</b>。每个枚举值右侧的截图为该枚举值下真实素材的前15秒关键帧，<b>点击截图可直接打开原视频核对</b>；未抽帧的枚举值如实标注「暂无画面证据」，不放示意图。</div>{combo_table()}</article></div></section></div><div id="golden" class="view"><section class="section"><h2>素材起量黄金公式</h2><p>只保留已逐帧复核的真人口播、实拍展示或剧情素材；<b>普通图片轮播 / AI图文素材已全部剔除</b>。每条公式<b>最多 3 个创意标签</b>，标签可来自 <b>15 个二级标签中的任意维度</b>（不固定为痛点/实测/场景三类），<b>按该素材前15秒真实画面与字幕判断</b>，并与右侧开头/中间/结尾关键帧一一对应。目标人群明确到年龄、性别、场景和诉求。</p>{golden_table()}</section></div><div id="sector" class="view"><section class="section"><h2>服饰分行业看板汇总</h2><div class="hint">各行业创意看板入口，点击卡片在新标签页打开对应看板原始链接。<b>大盘创意数据</b>为公司内网 BI 看板，需在内网/已登录环境下访问。</div>{sector_cards()}</section></div><footer class="footer">素材8.20 · 前15秒创意分析 · 数据来源：用户提供表格</footer></main><div id="modal" class="modal"><div class="dialog"><button id="close" class="close">关闭</button><h2 id="mtitle">标签明细</h2><div id="mbody"></div></div></div><script>const DATA={DIMJSON};const kinds={{high:'ctr 高',low:'ctr 低',rising:'ctr 上升趋势',all:'全部枚举值'}};document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===b.dataset.v))}});document.querySelectorAll('.detail').forEach(b=>b.onclick=()=>{{let d=DATA[b.dataset.dim]||{{name:'',rows:[]}};document.getElementById('mtitle').textContent=kinds[b.dataset.kind]+' · '+d.name+' · 全部枚举值表现（按CTR降序）';document.getElementById('mbody').innerHTML='<div class="scroll"><table class="perf"><thead><tr><th>枚举值</th><th>CTR</th><th>CTR趋势</th><th>平均播放时长</th><th>3秒完播率</th><th>CVR</th></tr></thead><tbody>'+d.rows.map(r=>`<tr><td>${{r.tag}}</td><td><b>${{r.ctr}}%</b></td><td>${{r.slope===null?'—':(r.slope>0?'+':'')+r.slope+'pp'}}</td><td>${{r.dur}}s</td><td>${{r.v3}}%</td><td>${{r.cvr}}%</td></tr>`).join('')+'</tbody></table></div>';document.getElementById('modal').classList.add('open')}});document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('open');</script></body></html>'''
 DOCS.mkdir(exist_ok=True)
 (DOCS/'index.html').write_text(PAGE,encoding='utf-8')
 # 静态 frames 同步到 GitHub Pages 发布目录
